@@ -47,6 +47,23 @@ function resolveBattle(battle, battleLogName)
         // How to determine the rolls results
 
         /**
+         * ROLL SIMULATOR
+         * 
+         *  A) STANDARD SIMULATION
+         * 1_ Create Combat models - (Str, Combat, rolls)
+         * 2_ Determine each sides (list) HurtableModels (Def,Wounds,Fate, trapped)
+         * 3_ ApplyCombatRules (Combat Dices)
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         * 
+         */
+
+
+        /**
          * My rolls are independent of enemy rolls, so deal with each dice and
          * determine the probability to get each of the results.
          * 1: x%
@@ -108,24 +125,56 @@ class Battle {
     {
         this.Army_A = [];
         this.Army_B = [];
-
-
     }
+
+
+    /*  
+    
+    */
+    DetermineHurtableModels()
+    {
+        
+    }
+
+    SetPriorityTargets();
+
 }
 
 
 
-class Dice
+class Dice_D6
 {
-    constructor(max,Combat,Strength)
+    constructor(Combat,Strength)
     {
         this.Combat = Combat;
-        this.MaxValue = max;
         this.Str = Strength;
+        this.roll = -1; // not defined
     };
 
+    RollDice()
+    {
+        // rand generation 1-6
+        roll = rand;
+    }
 
 }
+
+// apr
+function RollD3()
+{
+    let d6 = new Dice_D6(0,0);
+    d6.RollDice();
+
+    // better generate rand 1-3
+
+    if (d6.roll <=2)
+        return 1;
+    else if (d6.roll <=4)
+        return 2;
+    else 
+        return 3;
+}
+
 
 
 class Army 
