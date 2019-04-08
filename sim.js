@@ -2,6 +2,15 @@
  * Main execution point for the project
  */
 
+const rolls = require("./src/rolls");
+
+
+
+
+
+
+
+
  /**
   * Skirmish simulator, in a single encounter both sides have a %chance to WIN/HURT/KILL opponents.
   * This will also validate the possibility of using special actions like shielding, charges, special attacks, ...
@@ -22,6 +31,8 @@
  *  | Mv | Fc | Fa | S | D | A | W | C || M | W | F |
  *  
  */
+
+
 
 const SpecialRules = {
     BroadSword: 50001,
@@ -53,6 +64,12 @@ function resolveBattle(battle, battleLogName)
          * 1_ Create Combat models - (Str, Combat, rolls)
          * 2_ Determine each sides (list) HurtableModels (Def,Wounds,Fate, trapped)
          * 3_ ApplyCombatRules (Combat Dices)
+         *      - Weapons are pointers to the special attack list.
+         *      - Special attacks point to effects at the different stages of combat.
+         *          .BeforeCombatRoll (cav charge, Feint -> - d3 Combat) (add strenght here too?)
+         *          .AfterCombatRoll  (Rerolls, -1 to 2h, ...)
+         *          .BeforeWoundRoll  (isTrapped?, calculate/decide who to hit)
+         *          .AfterWoundRoll   (+1 by 2h, reroll 1s, )
          * 
          * 
          * 
@@ -136,7 +153,7 @@ class Battle {
         
     }
 
-    SetPriorityTargets();
+    SetPriorityTargets(){}
 
 }
 
@@ -188,13 +205,41 @@ class Army
     }
 }
 
+
+/** Unit is the defined Miniature with all possible loadouts specified.
+ * 
+ */
 class Unit
 {
     // weapons is an array
-    constructor(weapons, rules)
+    constructor(profile)
     {
-        this.weapons = weapons;
+        this.basePointValue = profile.basePointValue;
+        this.weapons = profile.weapons;
+        this.attr = profile.attr;
+        this.heroicActions = profile.attr;
         this.special = rules; // clashmen don´t decrease natural 6´s
+        this.options = profile.options;
     }
 
+
+    add
+
 }
+
+
+
+function test()
+{
+    console.log("\n \nStarting test test...\n");
+    console.log(rolls.rollD6());
+    console.log(rolls.rollD6());
+    console.log(rolls.rollD6());
+    console.log(rolls.rollD6());
+
+
+
+}
+
+
+test();

@@ -1,0 +1,30 @@
+{
+  "name": "mebsg_battlesim",
+  "version": "1.0.0",
+  "description": "add later",
+  "main": "sim.js",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^4.1.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keny91/MEBSG_battlesim.git"
+  },
+  "keywords": [
+    "MEBSG",
+    "lord",
+    "of",
+    "the",
+    "rings"
+  ],
+  "author": "Luis Herranz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/keny91/MEBSG_battlesim/issues"
+  },
+  "homepage": "https://github.com/keny91/MEBSG_battlesim#readme"
+}
