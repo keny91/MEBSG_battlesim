@@ -10,10 +10,15 @@ const CombatSpecialRules = {
     MasterLeague: 4000
   }
 
-const HitSpecialRules = {
+
+const 
+
+const HitSpecialRulesAfterRoll = {
     MightyBlow: 60001,
     Reroll_1s: 60002,  // poison, , others...
     Two_handed: 60003,   // +1
+    Cab_lance: 60004,       // +1
+    PiercingStrike: 60005,  // 
     MasterLeague: 4000
   }
 
@@ -89,7 +94,7 @@ function applyHitRulesToRolL(diceD6 , rules)
         switch(rule){
 
             // 50001
-            case SpecialRules.BroadSword:
+            case HitSpecialRulesAfterRoll.BroadSword:
                 if(diceD6.roll == 6 || roll == 1)
                     roll = roll;
                 else 
@@ -101,7 +106,7 @@ function applyHitRulesToRolL(diceD6 , rules)
 
 
             // 50003
-            case SpecialRules.Reroll_1s:
+            case HitSpecialRulesAfterRoll.Reroll_1s:
                 if(roll == 6 || roll == 1)
                     roll = roll;
                 else 
@@ -109,7 +114,7 @@ function applyHitRulesToRolL(diceD6 , rules)
             break;
 
             // 50004
-            case SpecialRules.Two_handed:
+            case HitSpecialRulesAfterRoll.Two_handed:
                 if(roll == 6 || roll == 1)
                     roll = roll;
                 else 
@@ -118,7 +123,7 @@ function applyHitRulesToRolL(diceD6 , rules)
 
             // 50005
             /*  Reroll only if losing the combat and can only  */
-            case SpecialRules.Banner:
+            case HitSpecialRulesAfterRoll.Banner:
                 if(roll == 6 || roll == 1)
                     roll = roll;
                 else 

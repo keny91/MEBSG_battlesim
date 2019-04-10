@@ -3,6 +3,7 @@
  */
 
 const rolls = require("./src/rolls");
+const { app, BrowserWindow } = require('electron');
 
 
 
@@ -43,6 +44,32 @@ const SpecialRules = {
     MasterLeague: 4000
   }
 
+
+function ElectronTest(app, BrowserWindow)
+{
+    let win ;
+
+    function createWindow () {
+        // Create the browser window.
+        win = new BrowserWindow({ width: 800, height: 600 })
+      
+        // and load the index.html of the app.
+        win.loadFile('./appUI/index.html')
+      
+        // Open the DevTools.
+        win.webContents.openDevTools()
+      
+        // Emitted when the window is closed.
+        win.on('closed', () => {
+          // Dereference the window object, usually you would store windows
+          // in an array if your app supports multi windows, this is the time
+          // when you should delete the corresponding element.
+          win = null
+        })
+    }
+    
+    app.on('ready', createWindow);
+}
 
 /** After all contenders in a battle have been determined
  * we will log all possibilities in a battle log
@@ -223,7 +250,7 @@ class Unit
     }
 
 
-    add
+    
 
 }
 
@@ -238,7 +265,7 @@ function test()
     console.log(rolls.rollD6());
 
 
-
+    ElectronTest(app, BrowserWindow);
 }
 
 

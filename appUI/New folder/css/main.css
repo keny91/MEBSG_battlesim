@@ -1,0 +1,100 @@
+
+
+
+
+.app-header-site
+{
+    background-color:#525263;
+    border-color:#c7d4f2;
+    height:54px
+}
+
+
+.app-body
+{
+
+}
+
+ul li {
+    border-width: 1px;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-item-group
+{
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+.side-bar
+{
+    position: absolute;
+    margin: 0px;
+    left: 0px;
+    right: auto;
+    top: 0px;
+    bottom: 0px; 
+    height: 1002px;
+    z-index: 0;
+    width: 270px;
+    display: block;
+    visibility: visible;
+
+}
+
+.app-menu-dark {
+    background-color: #535364;
+    height: 100%;
+    overflow: auto;
+    font-family: lato;
+    font-size: 13px;
+    display: block;
+}
+
+.app-header-site .navbar-amcharts
+{
+    padding:0;
+    min-height:54px
+}
+
+.app-header-site .navbar-amcharts .app-nav-brand{
+    width:90px;
+    height:50px;
+    position:absolute;
+    top:0
+}
+
+.app-header-site .navbar-amcharts .app-nav-brand-inner
+{
+    width:90px;
+    height:54px;
+    padding-left:8000px;
+    margin-left:-8000px;
+    border-bottom:4px solid #fff
+}
+
+.app-header-site .navbar-amcharts .app-nav-brand a
+{
+    width:90px;
+    height:54px;
+    display:block;
+    position:absolute;
+    bottom:-29px
+}
+
+.app-header-site .navbar-amcharts ul>li>a
+{
+    border-style:none solid none none;
+    border-width:1px;
+    border-color:#e4e7ea;
+    color:#fff;
+    padding:12px 15px 19px;
+    font-weight:700;
+    line-height:20px
+}
