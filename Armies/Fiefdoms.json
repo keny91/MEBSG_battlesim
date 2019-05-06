@@ -1,0 +1,92 @@
+{
+"index":
+[{
+    "prince Imrahil": 1,
+    "Forlong": 2,
+    "Angbor": 3,
+    "Duinhir": 4,
+    "Cpt Dol Amroth": 5,
+    "Knight Dol Amroth": 6,
+    "ManAtArms Dol Amroth": 7,
+    "Axeman of Lossarnach ": 8,
+    "Clansmen if Lamedon": 9,
+    "Blackroot Archer": 10
+}],
+
+"units":
+    [
+        
+    
+    {
+        "id":8,
+        "name":"Axeman of Lossarnach",
+        "labels":
+        [
+            "Man","Gondor","Infantry","Warrior"
+        ],
+        "points":9,
+        "profile":
+        [{
+            "Mv": 6,
+            "F": 4,
+            "FR": 4,
+            "S": 3,
+            "D": 5,
+            "A": 1,
+            "W": 1,
+            "C": 3
+        }],
+        "Equipment":
+        [
+            "axe-2h","dagger,spear"
+        ],
+        "Options":
+        [
+            ["Banner",25] 
+        ],
+        "Special":
+        [
+        ]
+
+
+    },
+    {
+        "id":10,
+        "name":"Blackroot Vale Archer",
+        "labels":
+        [
+            "Man","Gondor","Infantry","Warrior"
+        ],
+        "points":8,
+        "profile":
+        [{
+            "Mv": 6,
+            "F": 3,
+            "FR": 3,
+            "S": 3,
+            "D": 4,
+            "A": 1,
+            "W": 1,
+            "C": 2
+        }],
+        "Equipment":
+        [
+            "Bow","Sword"
+        ],
+        "Options":
+        [
+            ["Spear",1],
+            ["Banner",25],
+            ["WarHorn",30] 
+        ],
+        "Special":
+        [
+            "MountainDweller", "Dead-eyeShot"
+        ]
+
+
+    }
+    ],
+    "version":"0.0.1"
+    
+}

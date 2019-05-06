@@ -4,6 +4,7 @@
 
 const rolls = require("./src/rolls");
 const { app, BrowserWindow } = require('electron');
+const fiefdoms = require("./Armies/Fiefdoms.json")
 
 
 
@@ -45,31 +46,34 @@ const SpecialRules = {
   }
 
 
-function ElectronTest(app, BrowserWindow)
-{
-    let win ;
 
-    function createWindow () {
-        // Create the browser window.
-        win = new BrowserWindow({ width: 800, height: 600 })
+  // ENABLE LATER
+
+// function ElectronTest(app, BrowserWindow)
+// {
+//     let win ;
+
+//     function createWindow () {
+//         // Create the browser window.
+//         win = new BrowserWindow({ width: 800, height: 600 })
       
-        // and load the index.html of the app.
-        win.loadFile('./appUI/index.html')
+//         // and load the index.html of the app.
+//         win.loadFile('./appUI/index.html')
       
-        // Open the DevTools.
-        win.webContents.openDevTools()
+//         // Open the DevTools.
+//         win.webContents.openDevTools()
       
-        // Emitted when the window is closed.
-        win.on('closed', () => {
-          // Dereference the window object, usually you would store windows
-          // in an array if your app supports multi windows, this is the time
-          // when you should delete the corresponding element.
-          win = null
-        })
-    }
+//         // Emitted when the window is closed.
+//         win.on('closed', () => {
+//           // Dereference the window object, usually you would store windows
+//           // in an array if your app supports multi windows, this is the time
+//           // when you should delete the corresponding element.
+//           win = null
+//         })
+//     }
     
-    app.on('ready', createWindow);
-}
+//     app.on('ready', createWindow);
+// }
 
 /** After all contenders in a battle have been determined
  * we will log all possibilities in a battle log
@@ -169,18 +173,33 @@ class Battle {
     {
         this.Army_A = [];
         this.Army_B = [];
+
+        // this is the current phase that is being resolved
+        // 100 - 199 - 
+        // 200 - 299 
+        // 300 - 399 
+        // 400 - 499 
+        this.phaseIndex;
+        // Max 
+        this.maxphaseIndex;
+
+        
     }
 
 
     /*  
     
     */
-    DetermineHurtableModels()
+
+
+    // progresses through each unit in each phase
+    next()
     {
         
-    }
 
-    SetPriorityTargets(){}
+        // the return indicates phase + unit index
+        return ;
+    }
 
 }
 
@@ -199,6 +218,19 @@ class Dice_D6
     {
         // rand generation 1-6
         roll = rand;
+    }
+
+    ModifyResult(amount)
+    {
+        if(this.roll != -1)
+        {
+            this.roll += amount;
+        }
+        else
+        {
+            console.warn("");
+        }
+
     }
 
 }
@@ -226,9 +258,10 @@ class Army
     constructor()
     {
         // units that can be injured during a combat (support units cannot be hurt on regular combats)
-        this.meleTargets = [];
-        this.totalUnits;
-        this.totalDices;
+        this.meleTargets = []; // contains index reference to unit
+        this.unitList;  // 
+        this.combatDices;
+        this.nofUnits;
     }
 }
 
@@ -239,7 +272,7 @@ class Army
 class Unit
 {
     // weapons is an array
-    constructor(profile)
+    constructor(profile, indexRef)
     {
         this.basePointValue = profile.basePointValue;
         this.weapons = profile.weapons;
@@ -247,10 +280,58 @@ class Unit
         this.heroicActions = profile.attr;
         this.special = rules; // clashmen don´t decrease natural 6´s
         this.options = profile.options;
+        this.armyIndex = indexRef;
     }
 
 
     
+
+}
+
+
+class CombatController
+{
+    constructor()
+    {
+        this.setup = [];
+        this.ChargePhaseEffects = [];
+        this.Pre_CombatRollEffects = [];
+        this.Post_CombatRollEffects = [];
+        this.Pre_WoundRollEffects = [];
+        this.Post_WoundRollEffects = [];
+        this.Post_Combat = [];
+    }
+    
+    RegisterEffects(effects)
+    {
+        // find the listed effect - 1by1
+
+        // add effect to the corresponding phase phase
+
+        // th
+
+
+
+
+
+    };
+}
+
+
+class SpecialRule
+{
+    constructor(funcCB, type, profile)
+    {
+        this.funct = funcCB;
+        this.type = type;
+        this.callback = cb;
+
+    }
+
+    resolve()
+    {
+         
+    }
 
 }
 
@@ -264,8 +345,11 @@ function test()
     console.log(rolls.rollD6());
     console.log(rolls.rollD6());
 
+    console.log(fiefdoms);
+    console.log(fiefdoms.index);
+    //console.log(fiefdoms("index"));
 
-    ElectronTest(app, BrowserWindow);
+    //ElectronTest(app, BrowserWindow);
 }
 
 
