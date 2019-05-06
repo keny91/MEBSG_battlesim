@@ -171,8 +171,8 @@ function resolveBattle(battle, battleLogName)
 class Battle {
     constructor()
     {
-        this.Army_A = [];
-        this.Army_B = [];
+        this._A = [];
+        this._B = [];
 
         // this is the current phase that is being resolved
         // 100 - 199 - 
@@ -253,17 +253,63 @@ function RollD3()
 
 
 
-class Army 
+class UnitBuilder
 {
-    constructor()
+    constructor(formated_struct)
     {
-        // units that can be injured during a combat (support units cannot be hurt on regular combats)
-        this.meleTargets = []; // contains index reference to unit
-        this.unitList;  // 
-        this.combatDices;
-        this.nofUnits;
+        this.id = formated_struct.id;
+        this.name = name;
+        this.labels = [];
+        
+        // Check all players taking part in the match
+        for (let label in formated_struct.labels) {
+            console.log(labels[label]);
+        }
+
+        //let player_id = player_ids[player];
+        // "labels":
+        // [
+        //     "Man","Gondor","Infantry","Warrior"
+        // ],
+        // "points":9,
+        // "profile":
+        // [{
+        //     "Mv": 6,
+        //     "F": 4,
+        //     "FR": 4,
+        //     "S": 3,
+        //     "D": 5,
+        //     "A": 1,
+        //     "W": 1,
+        //     "C": 3
+        // }],
+        // "Equipment":
+        // [
+        //     "axe-2h","dagger,spear"
+        // ],
+        // "Options":
+        // [
+        //     ["Banner",25] 
+        // ],
+        // "Special":
+        // [
+        // ]
     }
 }
+
+class Builder
+{
+    constructor(json_formated_file)
+    {
+        this.index = json_formated_file.index[0]; // contains index reference to unit
+        this.units = json_formated_file.units[0];  // 
+
+
+    }
+}
+
+
+
 
 
 /** Unit is the defined Miniature with all possible loadouts specified.
@@ -280,7 +326,7 @@ class Unit
         this.heroicActions = profile.attr;
         this.special = rules; // clashmen don´t decrease natural 6´s
         this.options = profile.options;
-        this.armyIndex = indexRef;
+        this.Index = indexRef;
     }
 
 
@@ -345,8 +391,12 @@ function test()
     console.log(rolls.rollD6());
     console.log(rolls.rollD6());
 
+    
     console.log(fiefdoms);
-    console.log(fiefdoms.index);
+    // console.log(fiefdoms.index[0]);
+
+    var unit = new Builder(fiefdoms);
+    console.log(unit);
     //console.log(fiefdoms("index"));
 
     //ElectronTest(app, BrowserWindow);
