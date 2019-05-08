@@ -1,21 +1,55 @@
 {
 "index":
-[{
-    "prince Imrahil": 1,
-    "Forlong": 2,
-    "Angbor": 3,
-    "Duinhir": 4,
-    "Cpt Dol Amroth": 5,
-    "Knight Dol Amroth": 6,
-    "ManAtArms Dol Amroth": 7,
-    "Axeman of Lossarnach ": 8,
-    "Clansmen if Lamedon": 9,
-    "Blackroot Archer": 10
-}],
+[
+    ["prince Imrahil", 1],
+    ["Forlong", 2],
+    ["Angbor", 3],
+    ["Duinhir", 4],
+    ["Cpt Dol Amroth", 5],
+    ["Knight Dol Amroth", 6],
+    ["ManAtArms Dol Amroth", 7],
+    ["Axeman of Lossarnach ", 8],
+    ["Clansmen if Lamedon", 9],
+    ["Blackroot Archer", 10]
+],
 "units":
     [
         
-    
+    {
+        "id":1,
+        "name":"Prince Imrahil",
+        "labels":
+        [
+            "Man","Gondor","Infantry","Hero"
+        ],
+        "points":140,
+        "profile":
+        {
+            "Mv": 6,
+            "F": 6,
+            "FR": 4,
+            "S": 4,
+            "D": 7,
+            "A": 3,
+            "W": 3,
+            "C": 6
+        },
+        "equipment":
+        [
+            "sword","shield","spear"
+        ],
+        "options":
+        [
+            ["armoredhorse",15],
+            ["lance",5]  
+        ],
+        "special":
+        [
+            "LineageNumenor", "DAforGondor"
+        ]
+
+
+    },
     {
         "id":8,
         "name":"Axeman of Lossarnach",
@@ -25,7 +59,7 @@
         ],
         "points":9,
         "profile":
-        [{
+        {
             "Mv": 6,
             "F": 4,
             "FR": 4,
@@ -34,16 +68,16 @@
             "A": 1,
             "W": 1,
             "C": 3
-        }],
-        "Equipment":
+        },
+        "equipment":
         [
-            "axe-2h","dagger,spear"
+            "axe-2h","dagger","spear"
         ],
-        "Options":
+        "options":
         [
-            ["Banner",25] 
+            ["banner",25] 
         ],
-        "Special":
+        "special":
         [
         ]
 
@@ -58,7 +92,7 @@
         ],
         "points":8,
         "profile":
-        [{
+        {
             "Mv": 6,
             "F": 3,
             "FR": 3,
@@ -67,18 +101,18 @@
             "A": 1,
             "W": 1,
             "C": 2
-        }],
-        "Equipment":
+        },
+        "equipment":
         [
-            "Bow","Sword"
+            "bow","sword"
         ],
-        "Options":
+        "options":
         [
-            ["Spear",1],
-            ["Banner",25],
-            ["WarHorn",30] 
+            ["spear",1],
+            ["banner",25],
+            ["warHorn",30] 
         ],
-        "Special":
+        "special":
         [
             "MountainDweller", "Dead-eyeShot"
         ]

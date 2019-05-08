@@ -1,7 +1,7 @@
 
 
 
-
+var DEBUG_ON = 0;
 
 
 function ejecutar(algunaFuncion, valor) 
@@ -45,6 +45,115 @@ class HeroProfile
 }
 
 
+
+
+
+// read the json and create a template for the unit
+class UnitBuilder
+{
+    constructor(formated_struct)
+    {
+        this.id = formated_struct.id;
+        this.name = formated_struct.name;
+        this.labels = [];
+        this.options = [];
+        
+        if(DEBUG_ON)
+            console.log("Loading Unit - "+ formated_struct.name);
+
+        // Check all players taking part in the match
+        for (let label in formated_struct.labels) {
+            //console.log(formated_struct.labels[label]);
+            this.labels.push(formated_struct.labels[label]);
+        }
+
+        this.profile = formated_struct.profile;
+        this.equipment = formated_struct.equipment;
+        this.points = formated_struct.points;
+        
+        for (let i in formated_struct.options) {
+            //console.log(formated_struct.labels[label]);
+            this.options.push(formated_struct.options[i]);
+        }
+
+        this.special = formated_struct.special;
+    }
+}
+
+class Builder
+{
+    constructor(json_formated_file)
+    {
+        this.nof_units = json_formated_file.units.length;
+        this.units = [];
+
+        this.index = json_formated_file.index;
+        for(var i = 0; i<this.nof_units; i++ )
+        {
+            this.units.push(new UnitBuilder (json_formated_file.units[i]));
+        }
+         // contains index reference to unit
+          // 
+
+    }
+
+
+    /* this is supposed to be easily done in the UI, 
+    we select the name and then we     
+    */
+    getUnitTemplate(id)
+    {
+        if (this.nof_units > 0)
+        {
+            for(var i = 0; i<this.nof_units; i++ )
+            {
+                if(this.units[i].id == id)
+                    return this.units[i];
+                
+            }
+
+            // not found
+            if(DEBUG_ON)
+                console.log("getUnitTemplate - Unit Not found with id "+ id+ " may yet to be defined?");
+            return undefined;
+        }
+        else
+        {
+            console.warn("There are no units in this list.")
+            return undefined;
+        }
+
+    }
+
+    /* Similar to getUnitID */
+    getIDbyUnitName(name)
+    {
+        var index_lenght = this.index.length;
+
+        if (index_lenght > 0)
+        {
+            for(var i = 0; i<index_lenght; i++ )
+            {
+                let entry = this.index[i];
+                if(entry[0] == name)
+                    return this.getUnitTemplate(entry[1]);       
+            }
+
+        }
+        else
+        {
+            console.warn("Index list is empty.")
+        }
+
+        //
+        return undefined;
+            
+    }
+
+}
+
+
+
 class Option
 {
     constructor(struct_data)
@@ -72,33 +181,57 @@ class Option
         }
 
         this.effectIds = CombatController.RegisterEffects(this.effects);
-        this.
+        
     }
 
     // when the option is deselected, we have to remove all effects from the combat phases
     onDeselect()
     {
-        this.effectIds = CombatController.
+        // this.effectIds = CombatController.
     }
 }
 
 
-class Effect
+
 
 /** Unit is the defined Miniature with all possible loadouts specified.
- * 
+ *  This is what the engine will interact with
  */
-class Miniature
+class CombatMiniature
 {
     // weapons is an array
-    constructor(profile)
+    constructor(unitTemplate)
     {
-        this.basePointValue = profile.basePointValue;
-        this.weapons = profile.weapons;
-        this.attr = profile.attr;
-        this.heroicActions = profile.attr;
-        this.special = rules; // clashmen don´t decrease natural 6´s
-        this.options = profile.options;
+        this.id = unitTemplate.id;
+        this.name = unitTemplate.name;
+        this.labels = [];
+        this.options = [];
+        
+        // Check all players taking part in the match
+        for (let label in unitTemplate.labels) {
+            //console.log(unitTemplate.labels[label]);
+            this.labels.push(unitTemplate.labels[label]);
+        }
+
+        this.profile = unitTemplate.profile;
+        this.equipment = unitTemplate.equipment;
+        this.points = unitTemplate.points;
+        
+        for (let i in unitTemplate.options) {
+            //console.log(unitTemplate.labels[label]);
+            this.options.push(unitTemplate.options[i]);
+        }
+
+        this.special = unitTemplate.special;
+
+        // now we work with the dices
+
+
+        this.isSupporting_id = -1; // the mini id that is being supported
+        this.isSpear = -1;
+        this.isPike = -1; // 2-line support
+        this.isHurtable = -1;
+
     }
     
 
@@ -125,3 +258,7 @@ class Miniature
 }
 
 
+
+exports.Builder = Builder;
+exports.UnitBuilder = UnitBuilder;
+exports.CombatMiniature = CombatMiniature;

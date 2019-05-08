@@ -5,7 +5,8 @@
 const rolls = require("./src/rolls");
 const { app, BrowserWindow } = require('electron');
 const fiefdoms = require("./Armies/Fiefdoms.json")
-
+const mordor = require("./Armies/Mordor.json")
+const mini = require("./src/mini")
 
 
 
@@ -168,41 +169,6 @@ function resolveBattle(battle, battleLogName)
 }
 
 
-class Battle {
-    constructor()
-    {
-        this._A = [];
-        this._B = [];
-
-        // this is the current phase that is being resolved
-        // 100 - 199 - 
-        // 200 - 299 
-        // 300 - 399 
-        // 400 - 499 
-        this.phaseIndex;
-        // Max 
-        this.maxphaseIndex;
-
-        
-    }
-
-
-    /*  
-    
-    */
-
-
-    // progresses through each unit in each phase
-    next()
-    {
-        
-
-        // the return indicates phase + unit index
-        return ;
-    }
-
-}
-
 
 
 class Dice_D6
@@ -253,75 +219,17 @@ function RollD3()
 
 
 
-class UnitBuilder
-{
-    constructor(formated_struct)
-    {
-        this.id = formated_struct.id;
-        this.name = name;
-        this.labels = [];
-        
-        // Check all players taking part in the match
-        for (let label in formated_struct.labels) {
-            console.log(labels[label]);
-        }
-
-        //let player_id = player_ids[player];
-        // "labels":
-        // [
-        //     "Man","Gondor","Infantry","Warrior"
-        // ],
-        // "points":9,
-        // "profile":
-        // [{
-        //     "Mv": 6,
-        //     "F": 4,
-        //     "FR": 4,
-        //     "S": 3,
-        //     "D": 5,
-        //     "A": 1,
-        //     "W": 1,
-        //     "C": 3
-        // }],
-        // "Equipment":
-        // [
-        //     "axe-2h","dagger,spear"
-        // ],
-        // "Options":
-        // [
-        //     ["Banner",25] 
-        // ],
-        // "Special":
-        // [
-        // ]
-    }
-}
-
-class Builder
-{
-    constructor(json_formated_file)
-    {
-        this.index = json_formated_file.index[0]; // contains index reference to unit
-        this.units = json_formated_file.units[0];  // 
-
-
-    }
-}
-
-
-
-
 
 /** Unit is the defined Miniature with all possible loadouts specified.
  * 
  */
-class Unit
+class CombatUnit
 {
     // weapons is an array
-    constructor(profile, indexRef)
+    constructor(UnitStruct)
     {
-        this.basePointValue = profile.basePointValue;
-        this.weapons = profile.weapons;
+        this.basePointValue = UnitStruct.basePointValue;
+        this.weapons = UnitStruct.weapons;
         this.attr = profile.attr;
         this.heroicActions = profile.attr;
         this.special = rules; // clashmen don´t decrease natural 6´s
@@ -335,7 +243,7 @@ class Unit
 }
 
 
-class CombatController
+class CombatHandler
 {
     constructor()
     {
@@ -395,9 +303,25 @@ function test()
     console.log(fiefdoms);
     // console.log(fiefdoms.index[0]);
 
-    var unit = new Builder(fiefdoms);
+    // load the army that the unit instance will be added
+    var armyFiefdoms = new mini.Builder(fiefdoms);
+    var armyMordor = new mini.Builder(mordor);
+    // console.log(armyMordor);
+
+    // Combat handler instance that will take the reins of the battle
+    var handler = new CombatHandler();
+
+    // Add units to the combat handler
+    var unit = armyFiefdoms.getIDbyUnitName("princeImrahil");
+
+    var combatUnit = new mini.combatUnit(armyFiefdoms.getUnitTemplate(1));
     console.log(unit);
-    //console.log(fiefdoms("index"));
+
+    handler.addUnit(combatUnit, team);
+
+
+
+
 
     //ElectronTest(app, BrowserWindow);
 }

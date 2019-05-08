@@ -1,0 +1,126 @@
+{
+    "index":
+    [{
+        "WitchKing": 1,
+        "Kamul the Easterling": 2,
+        "The Dark Marshal": 3,
+        "The Undying": 4,
+        "The Shadow Lord": 5,
+        "The Knight of Umbar": 6,
+        "The Betrayer": 7,
+        "The Dwimmerlaik": 8,
+        "Ringwraiths": 9,
+        "Shelob": 10,
+        "Gothmog": 11,
+        "The Mouth of Sauron": 12,
+        "Shagrat ": 13,
+        "Gorbag": 14,
+        "Kardush the Firecaller": 15,
+        "Orc Capitain": 16,
+        "Orc Shaman": 17,
+        "Orc Taskmaster": 18,
+        "Orc Drummer": 19,
+        "Morannon Orc Capitain": 20,
+        "Capitain of the Black Guard": 21,
+        "Black Guard Drummer": 22,
+        "Black Numenorean Marshal": 23,
+        "Mordor Uruk Capitain": 24,
+        "Mordor Troll Chiefstain": 25,
+        "Great Beast of Gorgoroth": 26,
+
+        "Orc Warrior": 27,
+        "Orc Tracker": 28,
+        "Morgul Stalker": 29,
+        "Warg Riders": 30,
+        "Morannon Orc": 31,
+        "Black Guard": 32,
+        "Black Numenorean": 33,
+        "Morgul Knight": 34,
+        "Mordor Uruk": 35,
+        "Mordor Troll": 36,
+        "Mordor Ballista": 37,
+        "Mordor Catapult": 38
+    }],
+
+    "units":
+        [
+            
+        
+        {
+            "id":27,
+            "name":"Orc Warrior",
+            "labels":
+            [
+                "Orc","Mordor","Infantry","Warrior"
+            ],
+            "points":5,
+            "profile":
+            {
+                "Mv": 6,
+                "F": 3,
+                "FR": 5,
+                "S": 3,
+                "D": 4,
+                "A": 1,
+                "W": 1,
+                "C": 2
+            },
+            "equipment":
+            [
+                "sword","pick"
+            ],
+            "options":
+            [
+                ["shield",1],
+                ["spear",1],
+                ["orc_bow",1],
+                ["2-h",1],
+                ["banner",25]
+            ],
+            "special":
+            [
+            ]
+    
+    
+        },
+        {
+            "id":31,
+            "name":"Morannon Orc",
+            "labels":
+            [
+                "Orc","Mordor","Infantry","Warrior"
+            ],
+            "points":7,
+            "profile":
+            {
+                "Mv": 6,
+                "F": 4,
+                "FR": 5,
+                "S": 4,
+                "D": 5,
+                "A": 1,
+                "W": 1,
+                "C": 2
+            },
+            "equipment":
+            [
+                "sword","mace","axe"
+            ],
+            "options":
+            [
+                ["shield",1],
+                ["spear",1],
+                ["banner",25]
+            ],
+            "special":
+            [
+    
+            ]
+    
+    
+        }
+        ],
+        "version":"0.0.1"
+        
+    }
+    
