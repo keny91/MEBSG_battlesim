@@ -242,13 +242,45 @@ class CombatUnit
 
 }
 
+/**
+ * Directive to identify which list/file corresponds 
+ * to the army index.
+ */
+const ArmyListIndex = {
+    MT: 1,  // 1000 - 1999
+    Rohan: 2,   // 2000 - 2999
+    C: 3,    // 2000 - 2999
+    D: 4,    
+    E: 5
+}
 
-class CombatHandler
+/** Search for a miniature given a full index
+ * turning it into an armyIndex (1,2,...nof_lists)
+ * and localArmyIndex (1-999)
+ * 
+ * @param {*} MiniatureIndex 
+ */
+function DetermineArmyIndex(MiniatureIndex)
+{
+    var LocalMiniatureIndex = MiniatureIndex%1000;
+    var ArmyListIndex = Math.floor(MiniatureIndex/1000);  
+    // point to the 
+    if(DEBUG_ON)
+    {
+
+    }
+    return [ArmyListIndex,LocalMiniatureIndex];
+} 
+
+class BattleHandler
 {
     constructor()
     {
-        this.setup = [];
-        this.ChargePhaseEffects = [];
+        this.teamA = [];
+        this.teamB = []
+        this.iniciative; // 1 -> team A ; 2 -> team B ; 0 -> undecided (let it be rand) 
+        this.setup = []; // Is this decision phase
+        this.ChargePhaseEffects = [];  // this is
         this.Pre_CombatRollEffects = [];
         this.Post_CombatRollEffects = [];
         this.Pre_WoundRollEffects = [];
@@ -264,11 +296,57 @@ class CombatHandler
 
         // th
 
-
-
-
-
     };
+
+
+     /* 1 -> team A ; 2 -> team B ; 0 -> undecided (let it be rand) 
+        In general, whoever has the iniciative will make the charge.
+     */
+    setIniciative(selection)
+    {
+        switch(selection)
+        {
+            case 1:
+                this.iniciative = 1;
+                break;
+            
+            case 2:
+                this.iniciative = 2;
+                break;
+            
+            case 0:
+                this.iniciative = 0;
+                break;
+            
+            case undefined:
+                this.iniciative = 0;
+                break;
+
+            default:
+                this.iniciative = 0;
+                break;
+
+        }
+        return;
+    }
+
+    addUnit(unitID, team)
+    {
+
+        if(team != 1 && team != 2)
+        {
+            console.error("Unit was tried to be assigned to invalid team.");
+            return -1;
+        }
+
+        // if(th)
+
+        // var teamSelection = team;
+        
+
+    }
+
+    
 }
 
 
@@ -309,15 +387,15 @@ function test()
     // console.log(armyMordor);
 
     // Combat handler instance that will take the reins of the battle
-    var handler = new CombatHandler();
+    var handler = new BattleHandler();
 
     // Add units to the combat handler
-    var unit = armyFiefdoms.getIDbyUnitName("princeImrahil");
-
-    var combatUnit = new mini.combatUnit(armyFiefdoms.getUnitTemplate(1));
+    var unit = armyFiefdoms.getIDbyUnitName("prince Imrahil");
     console.log(unit);
+    var combatUnit = new mini.CombatMiniature(armyFiefdoms.getUnitTemplate(1));
+    console.log(combatUnit);
 
-    handler.addUnit(combatUnit, team);
+    //handler.addUnit(combatUnit, team);
 
 
 
