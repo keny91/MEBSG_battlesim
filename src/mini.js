@@ -10,6 +10,29 @@ function ejecutar(algunaFuncion, valor)
 }
 
 
+//  "options": ["banner","other",25] 
+//   [0] Name ; [1] OptionType ;[2] Points
+const OptionTypes = {
+    weapon: 1,
+    equipment: 2,  // or profile
+    mount: 3,
+    other: 4
+}
+
+
+
+/**
+ * Special attack may have an effect before or after combat.
+ */
+const specialAttack = 
+{
+    faint:1,
+    backstab:2,
+    piercing:3,
+    stun:4
+}
+
+
 class Profile
 {
     constructor(struct_data)
@@ -154,42 +177,42 @@ class Builder
 
 
 
-class Option
-{
-    constructor(struct_data)
-    {
-        this.name = struct_data.name;
-        this.points = struct_data.points;
-        this.effects = struct_data.effects;
-        this.effectIds = []; // ids to identify what effects did the  
-    }
+// class Option
+// {
+//     constructor(struct_data)
+//     {
+//         this.name = struct_data.name;
+//         this.points = struct_data.points;
+//         this.effects = struct_data.effects;
+//         this.effectIds = []; // ids to identify what effects did the  
+//     }
 
 
-    onSelect(theCombatController)
-    {
-        // verify the controller is valid
-        if(theCombatController instanceof CombatController)
-        {
-            console.error("INVALID CombatController object");
-            return;
-        }
+//     onSelect(theCombatController)
+//     {
+//         // verify the controller is valid
+//         if(theCombatController instanceof CombatController)
+//         {
+//             console.error("INVALID CombatController object");
+//             return;
+//         }
 
-        if(this.effects == undefined || this.effects == null)
-        {
-            console.warn("This effect \'"+this.name+ "has no effects");
-            return;
-        }
+//         if(this.effects == undefined || this.effects == null)
+//         {
+//             console.warn("This effect \'"+this.name+ "has no effects");
+//             return;
+//         }
 
-        this.effectIds = CombatController.RegisterEffects(this.effects);
+//         this.effectIds = CombatController.RegisterEffects(this.effects);
         
-    }
+//     }
 
-    // when the option is deselected, we have to remove all effects from the combat phases
-    onDeselect()
-    {
-        // this.effectIds = CombatController.
-    }
-}
+//     // when the option is deselected, we have to remove all effects from the combat phases
+//     onDeselect()
+//     {
+//         // this.effectIds = CombatController.
+//     }
+// }
 
 
 
@@ -215,6 +238,7 @@ class CombatMiniature
 
         this.profile = unitTemplate.profile;
         this.equipment = unitTemplate.equipment;
+        this.weapons = unitTemplate.weapons;
         this.points = unitTemplate.points;
         
         for (let i in unitTemplate.options) {
@@ -247,10 +271,93 @@ class CombatMiniature
 
     /**
      * Given the ID, add the option; Modify value points and add the 
+     * [0] Name ; [1] OptionType ;[2] Points
      * @param {When selecting from a menu we will pick the option ID} optionId 
      */
-    addOption(optionId)
+    addOption(option)
     {
+
+        function getUnitTemplate(id)
+        {
+            if (this.nof_units > 0)
+            {
+                for(var i = 0; i<this.nof_units; i++ )
+                {
+                    if(this.units[i].id == id)
+                        return this.units[i];
+                    
+                }
+    
+                // not found
+                if(DEBUG_ON)
+                    console.log("getUnitTemplate - Unit Not found with id "+ id+ " may yet to be defined?");
+                return undefined;
+            }
+            else
+            {
+                console.warn("There are no units in this list.")
+                return undefined;
+            }
+    
+        };
+
+        function getIDbyUnitName(name)
+        {
+            var index_lenght = index.length;
+    
+            if (index_lenght > 0)
+            {
+                for(var i = 0; i<index_lenght; i++ )
+                {
+                    let entry = this.index[i];
+                    if(entry[0] == name)
+                        return getUnitTemplate(entry[1]);       
+                }
+    
+            }
+            else
+            {
+                console.warn("Index list is empty.")
+            }
+    
+            //
+            return undefined;
+                
+        };
+
+        let name = option[0];
+        let optionType = option[1];
+        let pointCost = option[2];
+        let optionIndex;
+
+        // Find the option in the option list, based in the optiontype
+        switch(optionType)
+        {
+            case "weapon":
+                var weapons = require("./../options/weapons");
+                optionIndex = weapons.index;
+
+            break;
+
+            case "equippement":
+                var equippements = require("./../options/equippements");
+                optionIndex = equippement.index;
+
+            break;
+        
+            case "mount":
+                var equippements = require("./../options/equippements");
+                optionIndex = equippement.index;
+                // change the profile if   "strengthMount > streghtRider"
+
+            break;
+
+            case "other":
+            break;
+        }
+
+        this.points += pointCost;
+        return 1;
 
     }
 

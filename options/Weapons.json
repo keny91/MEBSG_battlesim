@@ -1,0 +1,51 @@
+{
+"index":
+[
+    ["sword", 1],
+    ["dagger", 2],
+    ["2h-axe", 3],
+    ["spear", 4],
+    ["2h-maze", 5],
+    ["", 6],
+    ["", 7],
+    ["", 8],
+    ["", 9],
+    ["", 10]
+],
+"list":
+    [
+        
+    {
+        "id":1,
+        "name":"sword",
+        "specialAttack": ["faint"],
+        "is2handed":0 
+    },
+    {
+        "id":2,
+        "name":"dagger",
+        "specialAttack": ["faint"],
+        "is2handed":0 
+    },
+    {
+        "id":3,
+        "name":"2h-axe",
+        "specialAttack": ["piercing"],
+        "is2handed":1 
+    },
+    {
+        "id":4,
+        "name":"spear",
+        "specialAttack": "",
+        "is2handed":0
+    },
+    {
+        "id":5,
+        "name":"2h-maze",
+        "specialAttack": ["stun"],
+        "is2handed":1 
+    }
+    ],
+    "version":"0.0.1"
+    
+}

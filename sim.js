@@ -390,13 +390,13 @@ function test()
     var handler = new BattleHandler();
 
     // Add units to the combat handler
-    var unit = armyFiefdoms.getIDbyUnitName("prince Imrahil");
-    console.log(unit);
-    var combatUnit = new mini.CombatMiniature(armyFiefdoms.getUnitTemplate(1));
+    //var unit = armyFiefdoms.getIDbyUnitName("Blackroot Vale Archer");
+    //console.log(unit);
+    var combatUnit = new mini.CombatMiniature(armyFiefdoms.getUnitTemplate(10)); // 10 for valeroot archer
     console.log(combatUnit);
 
     //handler.addUnit(combatUnit, team);
-
+    combatUnit.addOption(combatUnit.options[0]);
 
 
 

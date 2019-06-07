@@ -8,7 +8,7 @@
     ["Cpt Dol Amroth", 5],
     ["Knight Dol Amroth", 6],
     ["ManAtArms Dol Amroth", 7],
-    ["Axeman of Lossarnach ", 8],
+    ["Axeman of Lossarnach", 8],
     ["Clansmen if Lamedon", 9],
     ["Blackroot Archer", 10]
 ],
@@ -36,12 +36,16 @@
         },
         "equipment":
         [
-            "sword","shield","spear"
+            
+        ],
+        "weapons":
+        [
+            "sword","shield"
         ],
         "options":
         [
-            ["armoredhorse",15],
-            ["lance",5]  
+            ["armoredhorse","mount",15],
+            ["lance","weapon",5]  
         ],
         "special":
         [
@@ -71,11 +75,15 @@
         },
         "equipment":
         [
-            "axe-2h","dagger","spear"
+            
+        ],
+        "weapons":
+        [
+            "axe-2h","dagger","spear","poleaxe"
         ],
         "options":
         [
-            ["banner",25] 
+            ["banner","other",25] 
         ],
         "special":
         [
@@ -104,13 +112,17 @@
         },
         "equipment":
         [
-            "bow","sword"
+            "bow"
+        ],
+        "weapons":
+        [
+            "sword"
         ],
         "options":
         [
-            ["spear",1],
-            ["banner",25],
-            ["warHorn",30] 
+            ["spear","weapon",1],
+            ["banner","other",25],
+            ["warhorn","other",30] 
         ],
         "special":
         [
