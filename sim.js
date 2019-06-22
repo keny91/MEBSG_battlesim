@@ -396,9 +396,10 @@ function test()
     console.log(combatUnit);
 
     //handler.addUnit(combatUnit, team);
-    combatUnit.addOption(combatUnit.options[0]);
+    combatUnit.addOption(5);
+    combatUnit.addOption(0);
 
-
+    console.log(combatUnit);
 
 
     //ElectronTest(app, BrowserWindow);

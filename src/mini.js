@@ -176,105 +176,14 @@ class Builder
 }
 
 
-
-// class Option
-// {
-//     constructor(struct_data)
-//     {
-//         this.name = struct_data.name;
-//         this.points = struct_data.points;
-//         this.effects = struct_data.effects;
-//         this.effectIds = []; // ids to identify what effects did the  
-//     }
-
-
-//     onSelect(theCombatController)
-//     {
-//         // verify the controller is valid
-//         if(theCombatController instanceof CombatController)
-//         {
-//             console.error("INVALID CombatController object");
-//             return;
-//         }
-
-//         if(this.effects == undefined || this.effects == null)
-//         {
-//             console.warn("This effect \'"+this.name+ "has no effects");
-//             return;
-//         }
-
-//         this.effectIds = CombatController.RegisterEffects(this.effects);
-        
-//     }
-
-//     // when the option is deselected, we have to remove all effects from the combat phases
-//     onDeselect()
-//     {
-//         // this.effectIds = CombatController.
-//     }
-// }
-
-
-
-
-/** Unit is the defined Miniature with all possible loadouts specified.
- *  This is what the engine will interact with
+/**
+ * ["spear","weapon",1],
+            ["banner","other",25],
+            ["warhorn","other",30] 
  */
-class CombatMiniature
+class Option
 {
-    // weapons is an array
-    constructor(unitTemplate)
-    {
-        this.id = unitTemplate.id;
-        this.name = unitTemplate.name;
-        this.labels = [];
-        this.options = [];
-        
-        // Check all players taking part in the match
-        for (let label in unitTemplate.labels) {
-            //console.log(unitTemplate.labels[label]);
-            this.labels.push(unitTemplate.labels[label]);
-        }
-
-        this.profile = unitTemplate.profile;
-        this.equipment = unitTemplate.equipment;
-        this.weapons = unitTemplate.weapons;
-        this.points = unitTemplate.points;
-        
-        for (let i in unitTemplate.options) {
-            //console.log(unitTemplate.labels[label]);
-            this.options.push(unitTemplate.options[i]);
-        }
-
-        this.special = unitTemplate.special;
-
-        // now we work with the dices
-
-
-        this.isSupporting_id = -1; // the mini id that is being supported
-        this.isSpear = -1;
-        this.isPike = -1; // 2-line support
-        this.isHurtable = -1;
-
-    }
-    
-
-      
-    //   ejecutar(function(palabra){ console.log(palabra) }, "Hola");
-
-      
-    elaborateOptionSelectionList()
-    {
-        
-
-    }
-
-    /**
-     * Given the ID, add the option; Modify value points and add the 
-     * [0] Name ; [1] OptionType ;[2] Points
-     * @param {When selecting from a menu we will pick the option ID} optionId 
-     */
-    addOption(option)
+    constructor(struct_data, id)
     {
 
         function getUnitTemplate(id)
@@ -325,35 +234,172 @@ class CombatMiniature
                 
         };
 
-        let name = option[0];
-        let optionType = option[1];
-        let pointCost = option[2];
-        let optionIndex;
+
+
+        this.active = false;
+        this.id = id;
+        this.name = struct_data[0];
+        this.optionType = struct_data[1];
+        this.pointCost = struct_data[2];
+        
+
+ 
+
+       // this.effects = struct_data.effects;
+       // this.effectIds = []; // ids to identify what effects did the  
+    }
+
+
+    onSelect(theCombatController)
+    {
+        // verify the controller is valid
+        if(theCombatController instanceof CombatController)
+        {
+            console.error("INVALID CombatController object");
+            return;
+        }
+
+        if(this.effects == undefined || this.effects == null)
+        {
+            console.warn("This effect \'"+this.name+ "has no effects");
+            return;
+        }
+
+        this.effectIds = CombatController.RegisterEffects(this.effects);
+        
+    }
+
+    // when the option is deselected, we have to remove all effects from the combat phases
+    onDeselect()
+    {
+        // this.effectIds = CombatController.
+    }
+}
+
+class Weapon
+{
+    constructor(name)
+    {
+
+    }
+
+    // add effect to combatMini
+    //AddEffects
+
+}
+
+
+/** Unit is the defined Miniature with all possible loadouts specified.
+ *  This is what the engine will interact with
+ */
+class CombatMiniature
+{
+    // weapons is an array
+    constructor(unitTemplate)
+    {
+        this.labels = [];
+        this.options = [];
+
+
+        this.isSupporting_id = -1; // the mini id that is being supported
+        this.isSpear = -1;
+        this.isPike = -1; // 2-line support
+        this.isHurtable = -1;
+
+        
+        // Check all players taking part in the match
+        for (let label in unitTemplate.labels) {
+            //console.log(unitTemplate.labels[label]);
+            this.labels.push(unitTemplate.labels[label]);
+        }
+
+        this.profile = unitTemplate.profile;
+        this.equipment = unitTemplate.equipment;
+        this.weapons = unitTemplate.weapons;
+        this.points = unitTemplate.points;
+        
+        for (let i in unitTemplate.options) {
+            //console.log(unitTemplate.labels[label]);
+            // create option object
+            let opt = new Option(unitTemplate.options[i],i);
+            this.options.push(opt);
+        }
+
+        this.special = unitTemplate.special;
+
+        // now we work with the dices
+
+
+        
+
+    }
+    
+
+      
+    //   ejecutar(function(palabra){ console.log(palabra) }, "Hola");
+
+      
+    elaborateOptionSelectionList()
+    {
+        
+
+    }
+
+    /**
+     * Given the ID, add the option; Modify value points and add the 
+     * [0] Name ; [1] OptionType ;[2] Points
+     * @param {When selecting from a menu we will pick the option ID} optionId 
+     */
+    addOption(optionIndex)
+    {
+        var optionListIndex;
+
+        if(optionIndex>this.options.length)
+        {
+            console.error("Invalid option index \""+optionIndex+"\" in CombatUnit \""+this.name+"\"");
+            return 0;
+        }
+        
+        let theSelectedOption = this.options[optionIndex];
 
         // Find the option in the option list, based in the optiontype
-        switch(optionType)
+        switch(theSelectedOption.optionType)
         {
             case "weapon":
                 var weapons = require("./../options/weapons");
-                optionIndex = weapons.index;
+                this.points += theSelectedOption.pointCost;
+                optionListIndex = weapons.index;
+                for(var i = 0; i<this.optionListIndex; i++ )
+                {
+                    this.units.push(new UnitBuilder (json_formated_file.units[i]));
+                }
+
+                this.weapons.push(options[optionListIndex].name);
+               
+
+                // find the 
 
             break;
 
             case "equippement":
                 var equippements = require("./../options/equippements");
-                optionIndex = equippement.index;
+                optionListIndex = equippement.index;
 
             break;
         
             case "mount":
                 var equippements = require("./../options/equippements");
-                optionIndex = equippement.index;
-                // change the profile if   "strengthMount > streghtRider"
+                optionListIndex = equippement.index;
+                // change the profile if  "strengthMount > streghtRider"
 
             break;
 
             case "other":
             break;
+
+            default:
+                console.error("Option type not defined.");
+                break;
         }
 
         this.points += pointCost;
