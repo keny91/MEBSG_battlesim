@@ -91,6 +91,7 @@ class UnitBuilder
         }
 
         this.profile = formated_struct.profile;
+        this.weapons = formated_struct.weapons;
         this.equipment = formated_struct.equipment;
         this.points = formated_struct.points;
         
@@ -278,14 +279,23 @@ class Option
 
 class Weapon
 {
-    constructor(name)
+    constructor(weaponStruct, weapon_index)
     {
+        this.selectIndex = weapon_index;
+        this.twoHanded = weaponStruct.is2handed;
+        this.name = weaponStruct.name;
+        this.specialAttacks = [];
+        for (let prop in weaponStruct.specialAttack) 
+        {
+            //console.log(unitTemplate.specialAttack[label]);
+            this.specialAttacks.push(weaponStruct.specialAttack[prop]);
+        }
 
     }
 
     // add effect to combatMini
     //AddEffects
-
+    
 }
 
 
@@ -315,7 +325,7 @@ class CombatMiniature
 
         this.profile = unitTemplate.profile;
         this.equipment = unitTemplate.equipment;
-        this.weapons = unitTemplate.weapons;
+        this.weapons = unitTemplate["weapons"];
         this.points = unitTemplate.points;
         
         for (let i in unitTemplate.options) {
@@ -353,6 +363,7 @@ class CombatMiniature
     addOption(optionIndex)
     {
         var optionListIndex;
+        var jsonRaw;
 
         if(optionIndex>this.options.length)
         {
@@ -363,18 +374,36 @@ class CombatMiniature
         let theSelectedOption = this.options[optionIndex];
 
         // Find the option in the option list, based in the optiontype
+        //      Here we give values to the list, opening different jsons depending on the optiontype
         switch(theSelectedOption.optionType)
         {
             case "weapon":
-                var weapons = require("./../options/weapons");
+                var jsonRaw = require("./../options/weapons");
                 this.points += theSelectedOption.pointCost;
-                optionListIndex = weapons.index;
-                for(var i = 0; i<this.optionListIndex; i++ )
-                {
-                    this.units.push(new UnitBuilder (json_formated_file.units[i]));
-                }
+                optionListIndex = jsonRaw.index;
 
-                this.weapons.push(options[optionListIndex].name);
+                for(var i = 0; i<optionListIndex.length; i++ )
+                {
+                    if(optionListIndex[i][0] == theSelectedOption.name)
+                    {
+                        let listIndexId = optionListIndex[i][1];
+                        let listId = jsonRaw.list[i]["id"];
+
+                        if(listId != listIndexId)
+                        {
+                            console.error("Missmatch in Weapons, \""+listId+"\" with listIndex \""+listIndexId+"\"");
+                            return 0;
+                        }
+                            
+                        this.weapons.push(jsonRaw.list[i]);
+
+                        break;
+                    }
+
+                    // this.units.push(new UnitBuilder (json_formated_file.units[i]));
+                }
+                
+                
                
 
                 // find the 
@@ -401,6 +430,9 @@ class CombatMiniature
                 console.error("Option type not defined.");
                 break;
         }
+
+
+
 
         this.points += pointCost;
         return 1;

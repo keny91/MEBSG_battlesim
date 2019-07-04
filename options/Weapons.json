@@ -37,13 +37,27 @@
         "id":4,
         "name":"spear",
         "specialAttack": "",
-        "is2handed":0
+        "is2handed":0,
+        "payload":["enableSupport", 1]
     },
     {
         "id":5,
         "name":"2h-maze",
         "specialAttack": ["stun"],
         "is2handed":1 
+    },
+    {
+        "id":6,
+        "name":"2h-sword",
+        "specialAttack": [""],
+        "is2handed":1 
+    },
+    {
+        "id":7,
+        "name":"polearm",
+        "specialAttack": [""],
+        "is2handed":1,
+        "payload":["addWeapons", ["spear","2h-axe"]]
     }
     ],
     "version":"0.0.1"
