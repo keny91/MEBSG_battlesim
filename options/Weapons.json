@@ -6,8 +6,8 @@
     ["2h-axe", 3],
     ["spear", 4],
     ["2h-maze", 5],
-    ["", 6],
-    ["", 7],
+    ["2h-sword", 6],
+    ["polearm", 7],
     ["", 8],
     ["", 9],
     ["", 10]
@@ -38,7 +38,7 @@
         "name":"spear",
         "specialAttack": "",
         "is2handed":0,
-        "payload":["enableSupport", 1]
+        "payload":[["enableSupport", 1]]
     },
     {
         "id":5,

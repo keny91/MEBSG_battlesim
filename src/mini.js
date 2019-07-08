@@ -277,26 +277,7 @@ class Option
     }
 }
 
-class Weapon
-{
-    constructor(weaponStruct, weapon_index)
-    {
-        this.selectIndex = weapon_index;
-        this.twoHanded = weaponStruct.is2handed;
-        this.name = weaponStruct.name;
-        this.specialAttacks = [];
-        for (let prop in weaponStruct.specialAttack) 
-        {
-            //console.log(unitTemplate.specialAttack[label]);
-            this.specialAttacks.push(weaponStruct.specialAttack[prop]);
-        }
 
-    }
-
-    // add effect to combatMini
-    //AddEffects
-    
-}
 
 
 /** Unit is the defined Miniature with all possible loadouts specified.
@@ -348,12 +329,13 @@ class CombatMiniature
       
     //   ejecutar(function(palabra){ console.log(palabra) }, "Hola");
 
-      
-    elaborateOptionSelectionList()
-    {
-        
 
-    }
+    /** AddWeapon
+     * 
+     * @param {object weapon} optionIndex 
+     */
+    addWeapon(weapon)
+
 
     /**
      * Given the ID, add the option; Modify value points and add the 
@@ -371,15 +353,17 @@ class CombatMiniature
             return 0;
         }
         
+
+        // Common to all types
         let theSelectedOption = this.options[optionIndex];
+        var jsonRaw;
 
         // Find the option in the option list, based in the optiontype
         //      Here we give values to the list, opening different jsons depending on the optiontype
         switch(theSelectedOption.optionType)
         {
             case "weapon":
-                var jsonRaw = require("./../options/weapons");
-                this.points += theSelectedOption.pointCost;
+                jsonRaw = require("./../options/weapons");
                 optionListIndex = jsonRaw.index;
 
                 for(var i = 0; i<optionListIndex.length; i++ )
@@ -394,7 +378,14 @@ class CombatMiniature
                             console.error("Missmatch in Weapons, \""+listId+"\" with listIndex \""+listIndexId+"\"");
                             return 0;
                         }
-                            
+                        
+                        // read payload
+                        if(jsonRaw.list[i].payload != undefined )
+                        {
+
+                        }
+
+
                         this.weapons.push(jsonRaw.list[i]);
 
                         break;
@@ -403,7 +394,9 @@ class CombatMiniature
                     // this.units.push(new UnitBuilder (json_formated_file.units[i]));
                 }
                 
-                
+                //
+                if(DEBUG_COMBAT_MINI != undefined)
+                    console.log("add")
                
 
                 // find the 
@@ -411,14 +404,19 @@ class CombatMiniature
             break;
 
             case "equippement":
-                var equippements = require("./../options/equippements");
-                optionListIndex = equippement.index;
+                jsonRaw = require("./../options/equippements");
+                optionListIndex = jsonRaw.index;
+
 
             break;
         
             case "mount":
-                var equippements = require("./../options/equippements");
-                optionListIndex = equippement.index;
+                jsonRaw = require("./../options/mounts");
+                optionListIndex = jsonRaw.index;
+
+                // if mounted, you gain 1 attack
+
+                // if mount strenhgt > rider_STR
                 // change the profile if  "strengthMount > streghtRider"
 
             break;
@@ -433,8 +431,9 @@ class CombatMiniature
 
 
 
+        // if successfull -> add points
+        this.points += theSelectedOption.pointCost;
 
-        this.points += pointCost;
         return 1;
 
     }
