@@ -3,6 +3,8 @@
 
 var DEBUG_ON = 0;
 
+var DEBUG_COMBAT_MINI  = 0;
+
 
 function ejecutar(algunaFuncion, valor) 
 {
@@ -296,6 +298,7 @@ class CombatMiniature
         this.isSpear = -1;
         this.isPike = -1; // 2-line support
         this.isHurtable = -1;
+        this.isSupport = -1;
 
         
         // Check all players taking part in the match
@@ -326,15 +329,41 @@ class CombatMiniature
     }
     
 
-      
-    //   ejecutar(function(palabra){ console.log(palabra) }, "Hola");
+      /**   Options have a 
+       * 
+       * @param {[tag1,contentValue1],[tag2,contentValue2]} payloadData 
+       */
+    parsePayload(payloadData)
+    {
 
+        for(var i = 0; i<payloadData.length; i++ )
+        {
+            let currentData = payloadData[i];
+            // parse all options
+            switch(currentData[0])
+            {
+                case "enableSupport":
+                    this.isSupport = currentData[1];
+                    if(currentData[1] == 1)
+                        this.isSpear == 1;
+                    else if (currentData[1] == 2)
+                        this.isPike == 1;
+                    break;
+
+                default:
+                    console.error("Payload Property not defined...");
+            }
+        }
+    }
 
     /** AddWeapon
      * 
      * @param {object weapon} optionIndex 
      */
     addWeapon(weapon)
+    {
+
+    }
 
 
     /**
@@ -382,12 +411,9 @@ class CombatMiniature
                         // read payload
                         if(jsonRaw.list[i].payload != undefined )
                         {
-
+                            this.parsePayload(jsonRaw.list[i].payload);
                         }
-
-
                         this.weapons.push(jsonRaw.list[i]);
-
                         break;
                     }
 
@@ -395,8 +421,8 @@ class CombatMiniature
                 }
                 
                 //
-                if(DEBUG_COMBAT_MINI != undefined)
-                    console.log("add")
+                if(DEBUG_COMBAT_MINI )
+                    console.log("add DEBUG info...")
                
 
                 // find the 

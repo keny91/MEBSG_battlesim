@@ -396,7 +396,7 @@ function test()
     console.log(combatUnit);
 
     //handler.addUnit(combatUnit, team);
-    combatUnit.addOption(5);
+    // combatUnit.addOption(5);
     combatUnit.addOption(0);
 
     console.log(combatUnit);
