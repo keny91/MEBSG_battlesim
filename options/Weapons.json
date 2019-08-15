@@ -57,7 +57,7 @@
         "name":"polearm",
         "specialAttack": [""],
         "is2handed":1,
-        "payload":["addWeapons", ["spear","2h-axe"]]
+        "payload":[["containsWeapon", ["spear","2h-axe"]]]
     }
     ],
     "version":"0.0.1"

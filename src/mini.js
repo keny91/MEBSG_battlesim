@@ -292,6 +292,7 @@ class CombatMiniature
     {
         this.labels = [];
         this.options = [];
+        this.weapons = [];
 
 
         this.isSupporting_id = -1; // the mini id that is being supported
@@ -309,7 +310,13 @@ class CombatMiniature
 
         this.profile = unitTemplate.profile;
         this.equipment = unitTemplate.equipment;
-        this.weapons = unitTemplate["weapons"];
+
+        for(var i = 0; i < unitTemplate["weapons"].length; i++ )
+        {
+            this.addWeapon(unitTemplate["weapons"][i]);
+        }
+
+        // this.weapons = unitTemplate["weapons"];
         this.points = unitTemplate.points;
         
         for (let i in unitTemplate.options) {
@@ -329,11 +336,12 @@ class CombatMiniature
     }
     
 
-      /**   Options have a 
+      /**   Payload data will help us track all the consecuences that we will or have enabled with it
        * 
-       * @param {[tag1,contentValue1],[tag2,contentValue2]} payloadData 
+       * @param {[tag1,contentValue1],[tag2,contentValue2]} payloadData     
+       * @param{int} Activating or deactivating the option
        */
-    parsePayload(payloadData)
+    parsePayload(payloadData , activating = 1)
     {
 
         for(var i = 0; i<payloadData.length; i++ )
@@ -350,19 +358,73 @@ class CombatMiniature
                         this.isPike == 1;
                     break;
 
+                
+                case "containsWeapon":
+                    // we can add multiple weapons
+                    for(var j = 0; j<currentData[1].length; j++)
+                        {
+                            let weapon = currentData[1][j];
+                            // create a weapon option that is added as an option (no point cost since it should have been)
+                            this.addWeapon(weapon);
+                        }
+                        // remove the current weapon
+                        return 2;
+                    break;
+
                 default:
                     console.error("Payload Property not defined...");
+                    return -1;
+                    break;
             }
         }
     }
 
     /** AddWeapon
      * 
-     * @param {object weapon} optionIndex 
+     * @param {string} the weapon name as it appears on the official index 
      */
-    addWeapon(weapon)
+    addWeapon(weaponName)
     {
+        var jsonRaw;
+        var weaponListIndex;
+        var rc ;
+        jsonRaw = require("./../options/weapons");
+        weaponListIndex = jsonRaw.index;
 
+        
+        for(var i = 0; i<weaponListIndex.length; i++ )
+        {
+            if(weaponListIndex[i][0] == weaponName)
+            {
+                let listIndexId = weaponListIndex[i][1];
+                let listId = jsonRaw.list[i]["id"];
+
+                if(listId != listIndexId)
+                {
+                    console.error("Missmatch in Weapons, \""+listId+"\" with listIndex \""+listIndexId+"\"");
+                    return 0;
+                }
+                
+                rc = 1; 
+
+                // read payload
+                if(jsonRaw.list[i].payload != undefined )
+                {
+                    rc = this.parsePayload(jsonRaw.list[i].payload);     
+                }
+
+                /* only add the weapon if the payload verifies it 
+                *   2  - means that payload does not require the weapon to be added
+                *   -1 - error happened
+                */
+                if (rc != 2 && rc != -1)
+                    this.weapons.push(jsonRaw.list[i]);
+
+                break;
+            }
+
+            // this.units.push(new UnitBuilder (json_formated_file.units[i]));
+        }
     }
 
 
@@ -371,10 +433,15 @@ class CombatMiniature
      * [0] Name ; [1] OptionType ;[2] Points
      * @param {When selecting from a menu we will pick the option ID} optionId 
      */
-    addOption(optionIndex)
+    toogleOption(optionIndex)
     {
-        var optionListIndex;
+
+        // Common to all types of options
+        let theSelectedOption = this.options[optionIndex];
         var jsonRaw;
+        var optionListIndex;
+        var rc;
+
 
         if(optionIndex>this.options.length)
         {
@@ -382,50 +449,29 @@ class CombatMiniature
             return 0;
         }
         
+        if (theSelectedOption.active)
+        {
+            console.warn("Option \""+theSelectedOption.name+"\" is already enabled, skipping...")
+            return 0;
+        }
 
-        // Common to all types
-        let theSelectedOption = this.options[optionIndex];
-        var jsonRaw;
 
         // Find the option in the option list, based in the optiontype
         //      Here we give values to the list, opening different jsons depending on the optiontype
         switch(theSelectedOption.optionType)
         {
             case "weapon":
-                jsonRaw = require("./../options/weapons");
-                optionListIndex = jsonRaw.index;
 
-                for(var i = 0; i<optionListIndex.length; i++ )
-                {
-                    if(optionListIndex[i][0] == theSelectedOption.name)
-                    {
-                        let listIndexId = optionListIndex[i][1];
-                        let listId = jsonRaw.list[i]["id"];
-
-                        if(listId != listIndexId)
-                        {
-                            console.error("Missmatch in Weapons, \""+listId+"\" with listIndex \""+listIndexId+"\"");
-                            return 0;
-                        }
-                        
-                        // read payload
-                        if(jsonRaw.list[i].payload != undefined )
-                        {
-                            this.parsePayload(jsonRaw.list[i].payload);
-                        }
-                        this.weapons.push(jsonRaw.list[i]);
-                        break;
-                    }
-
-                    // this.units.push(new UnitBuilder (json_formated_file.units[i]));
-                }
+                // turn the option into a weapon struct 
+                rc = this.addWeapon(theSelectedOption.name);
                 
+                if(rc)
+                // mark as active
+                theSelectedOption.active != theSelectedOption.active;
+
                 //
                 if(DEBUG_COMBAT_MINI )
-                    console.log("add DEBUG info...")
-               
-
-                // find the 
+                    console.log("add DEBUG info...");
 
             break;
 
