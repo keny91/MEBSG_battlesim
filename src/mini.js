@@ -288,18 +288,21 @@ class Option
 class CombatMiniature
 {
     // weapons is an array
-    constructor(unitTemplate)
+    constructor(unitTemplate, id)
     {
         this.labels = [];
         this.options = [];
         this.weapons = [];
+        this.name = unitTemplate.name;
+        this.id = id;
 
-
-        this.isSupporting_id = -1; // the mini id that is being supported
-        this.isSpear = -1;
-        this.isPike = -1; // 2-line support
-        this.isHurtable = -1;
-        this.isSupport = -1;
+        this.isSupport = 0; // change to [support?, type]
+        this.isSupporting_id = -1; // the mini id that is being supported [] <= I don´t know if this will be required.
+        this.isSpear = 0;
+        this.isPike = 0; // 2-line support
+        this.isHurtable = 0;
+        
+        this.isMounted = [-1,-1]; // [boolMounted?,MountName]
 
         
         // Check all players taking part in the match
@@ -313,7 +316,7 @@ class CombatMiniature
 
         for(var i = 0; i < unitTemplate["weapons"].length; i++ )
         {
-            this.addWeapon(unitTemplate["weapons"][i]);
+            this.toogleWeapon(unitTemplate["weapons"][i]); // by default adding weapon
         }
 
         // this.weapons = unitTemplate["weapons"];
@@ -341,7 +344,7 @@ class CombatMiniature
        * @param {[tag1,contentValue1],[tag2,contentValue2]} payloadData     
        * @param{int} Activating or deactivating the option
        */
-    parsePayload(payloadData , activating = 1)
+    parsePayload(payloadData , revert = 0)
     {
 
         for(var i = 0; i<payloadData.length; i++ )
@@ -353,9 +356,14 @@ class CombatMiniature
                 case "enableSupport":
                     this.isSupport = currentData[1];
                     if(currentData[1] == 1)
-                        this.isSpear == 1;
+                        this.isSpear = !revert;
                     else if (currentData[1] == 2)
-                        this.isPike == 1;
+                        this.isPike = !revert;
+                    else if (currentData[1] == 3 && this.isMounted[0] == 0) // war spear
+                        this.isSpear = !revert;
+                    else
+                        this.isSupport = 0;
+                    
                     break;
 
                 
@@ -365,7 +373,7 @@ class CombatMiniature
                         {
                             let weapon = currentData[1][j];
                             // create a weapon option that is added as an option (no point cost since it should have been)
-                            this.addWeapon(weapon);
+                            this.toogleWeapon(weapon,revert);
                         }
                         // remove the current weapon
                         return 2;
@@ -377,54 +385,125 @@ class CombatMiniature
                     break;
             }
         }
+        return 1;
     }
 
-    /** AddWeapon
+    /** toogleWeapon
      * 
-     * @param {string} the weapon name as it appears on the official index 
+     * @param {*string} string weapon name as it appears on the official index 
+     * @param {*boolean} boolean adding or removing? 
      */
-    addWeapon(weaponName)
+    toogleWeapon(FULLweaponName, remove)
     {
-        var jsonRaw;
-        var weaponListIndex;
+        var weaponProfile;
+        var weaponSpecial, weaponName;
+        var hasTHEweapon;
         var rc ;
-        jsonRaw = require("./../options/weapons");
-        weaponListIndex = jsonRaw.index;
 
-        
-        for(var i = 0; i<weaponListIndex.length; i++ )
+
+        function HasWeapon(weaponName, weapons)
         {
-            if(weaponListIndex[i][0] == weaponName)
+            for(var i = 0; i<weapons.length; i++ )
             {
-                let listIndexId = weaponListIndex[i][1];
-                let listId = jsonRaw.list[i]["id"];
+                if(weapons[i].name == weaponName)
+                    return 1;
+            }
+            return 0;
+        }
 
-                if(listId != listIndexId)
+        /**
+         * 
+         * @param {*string} weaponName 
+         */
+        function FindWeapon(weaponName)
+        {
+            var jsonRaw = require("./../options/weapons");
+            var weaponListIndex = jsonRaw.index;
+            for(var i = 0; i<weaponListIndex.length; i++ )
+            {
+                if(weaponListIndex[i][0] == weaponName)
                 {
-                    console.error("Missmatch in Weapons, \""+listId+"\" with listIndex \""+listIndexId+"\"");
-                    return 0;
+                    let listIndexId = weaponListIndex[i][1];
+                    let listId = jsonRaw.list[i]["id"];
+    
+                    if(listId != listIndexId)
+                    {
+                        console.error("Missmatch in Weapons, \""+listId+"\" with listIndex \""+listIndexId+"\"");
+                        return -1;
+                    }
+                    
+                    return jsonRaw.list[i];
                 }
-                
-                rc = 1; 
-
-                // read payload
-                if(jsonRaw.list[i].payload != undefined )
-                {
-                    rc = this.parsePayload(jsonRaw.list[i].payload);     
-                }
-
-                /* only add the weapon if the payload verifies it 
-                *   2  - means that payload does not require the weapon to be added
-                *   -1 - error happened
-                */
-                if (rc != 2 && rc != -1)
-                    this.weapons.push(jsonRaw.list[i]);
-
-                break;
             }
 
-            // this.units.push(new UnitBuilder (json_formated_file.units[i]));
+            // if we get here, it means that we did not found the weapon in the list
+            console.error("Weapon \""+weaponName+"\" not found at  \""+"./options/weapons"+"\" ...");
+            return -1;
+        
         }
+
+        // Are we here to un/equip?
+
+        // Does the unit has such a weapon already?
+
+        // split subfixes to add effect to certain weapons ->  (WeaponName+Subfix)  Wher
+        var str = FULLweaponName.split("+");
+        // no subfix
+
+
+        weaponName = str[0];
+        if(str.length>1)
+            weaponSpecial = str[1];
+        // if(str[1] == "")
+        //     weaponSpecial = str[1];
+
+
+        // Find 
+        weaponProfile = FindWeapon(weaponName);
+        // 
+        hasTHEweapon = HasWeapon(weaponName, this.weapons);
+
+        // Statement to admit adding a new weapon
+        if(hasTHEweapon && !remove)
+        {
+            console.error("Weapon \""+weaponName+"\" is already present in "+this.name+". With ID: "+this.id+".");
+            return -1; 
+        }
+
+        // Statement to admit adding a new weapon
+        if(!hasTHEweapon && remove)
+        {
+            console.error("Weapon \""+weaponName+"\" is NOT present in "+this.name+". With ID: "+this.id+".");
+            return -1; 
+        }
+
+        // weapon not found - for whatever reason
+        if(weaponProfile == -1)
+            return -1;
+       
+
+        /********************* PARSE WEAPON SPECIAL ******** */
+
+        if(weaponProfile.payload != undefined )
+        {
+            rc = this.parsePayload(weaponProfile.payload, remove);     
+        }
+
+        /* only add the weapon if the payload verifies it 
+        *   2  - means that payload does not require the weapon to be added
+        *   -1 - error happened
+        */
+        if (rc != 2 && rc != -1)
+        {
+            if (remove)
+                this.weapons.pop(weaponProfile);
+            else
+                this.weapons.push(weaponProfile);
+        }
+            
+
+        return 1;
+
     }
 
 
@@ -441,6 +520,7 @@ class CombatMiniature
         var jsonRaw;
         var optionListIndex;
         var rc;
+        var revert;
 
 
         if(optionIndex>this.options.length)
@@ -449,12 +529,12 @@ class CombatMiniature
             return 0;
         }
         
+        //  NOT IF WE ARE TOOGLING
         if (theSelectedOption.active)
-        {
-            console.warn("Option \""+theSelectedOption.name+"\" is already enabled, skipping...")
-            return 0;
-        }
+            revert = 1;
 
+        else
+            revert = 0;
 
         // Find the option in the option list, based in the optiontype
         //      Here we give values to the list, opening different jsons depending on the optiontype
@@ -463,12 +543,8 @@ class CombatMiniature
             case "weapon":
 
                 // turn the option into a weapon struct 
-                rc = this.addWeapon(theSelectedOption.name);
+                rc = this.toogleWeapon(theSelectedOption.name, revert);
                 
-                if(rc)
-                // mark as active
-                theSelectedOption.active != theSelectedOption.active;
-
                 //
                 if(DEBUG_COMBAT_MINI )
                     console.log("add DEBUG info...");
@@ -504,7 +580,11 @@ class CombatMiniature
 
 
         // if successfull -> add points
-        this.points += theSelectedOption.pointCost;
+        if(rc)
+        {
+            this.points += theSelectedOption.pointCost;
+            theSelectedOption.active = !theSelectedOption.active;
+        }
 
         return 1;
 

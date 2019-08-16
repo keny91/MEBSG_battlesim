@@ -396,11 +396,12 @@ function test()
     console.log(combatUnit);
 
     //handler.addUnit(combatUnit, team);
-    // combatUnit.addOption(5);
-    combatUnit.addOption(0);
+    // combatUnit.toogleOption(5);
+    combatUnit.toogleOption(0);
 
     console.log(combatUnit);
 
+    combatUnit.toogleOption(0);
 
     //ElectronTest(app, BrowserWindow);
 }
