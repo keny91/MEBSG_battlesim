@@ -349,7 +349,25 @@ class CombatMiniature
 
         for(var i = 0; i<payloadData.length; i++ )
         {
+            let hasSubfix = 0; // by default
             let currentData = payloadData[i];
+            let subfix;
+
+            let str = payloadData[i].split("+");    
+            // no subfix
+            weaponName = str[0];
+            if(str.length>1)
+            {   
+                hasSubfix = 1;
+                if (str[1] != undefined)
+                    subfix = str[1];  
+                else 
+                    return -1;         // error statement
+            }
+                
+
+            
+            
             // parse all options
             switch(currentData[0])
             {
@@ -377,6 +395,14 @@ class CombatMiniature
                         }
                         // remove the current weapon
                         return 2;
+                    break;
+
+                case "effect":
+                    if(subfix == undefined)
+                        return -1;
+
+                    parseEffect(subfix,revert); // implement this in effect
+
                     break;
 
                 default:
@@ -460,7 +486,7 @@ class CombatMiniature
 
         // Find 
         weaponProfile = FindWeapon(weaponName);
-        // 
+        // Check if the requested item has been selected.
         hasTHEweapon = HasWeapon(weaponName, this.weapons);
 
         // Statement to admit adding a new weapon

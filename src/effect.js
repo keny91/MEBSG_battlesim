@@ -1,5 +1,6 @@
 
-const EffectTarget = {
+const EffectTarget = 
+{
     Self: 100,
     // combat minis in the same army
     SingleAlly: 101,
@@ -12,4 +13,14 @@ const EffectTarget = {
 
     AllOther:107,
     NoTarget:108
-  }
+}
+
+
+
+class Effect {
+
+  constructor(struct_data, id)
+    {
+
+    }
+}

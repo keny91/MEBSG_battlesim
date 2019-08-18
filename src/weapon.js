@@ -15,10 +15,9 @@ class Weapon
         // "is2handed":0,
         // "payload":[["enableSupport", 1]]
 
-        this.selectIndex = weapon_index;
+        this.selectIndex = weaponStruct.id;
         this.twoHanded = weaponStruct.is2handed;
         this.name = weaponStruct.name;
-        this.specialAttacks = [];
         for (let prop in weaponStruct.specialAttack) 
         {
             //console.log(unitTemplate.specialAttack[label]);
