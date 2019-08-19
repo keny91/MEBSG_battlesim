@@ -8,7 +8,7 @@
     ["2h-maze", 5],
     ["2h-sword", 6],
     ["polearm", 7],
-    ["banner", 8],
+    ["", 8],
     ["", 9],
     ["", 10]
 ],
@@ -56,15 +56,9 @@
         "id":7,
         "name":"polearm",
         "specialAttack": [""],
+        "isNotSelectable": 1,
         "is2handed":1,
         "payload":[["containsWeapon", ["spear","2h-axe"]]]
-    },
-    {
-        "id":8,
-        "name":"banner",
-        "specialAttack": [""],
-        "is2handed":1,
-        "payload":[["effect+banner"]]
     }
     ],
     "version":"0.0.1"

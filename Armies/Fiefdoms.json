@@ -120,6 +120,7 @@
         ],
         "options":
         [
+            ["polearm","weapon",1],
             ["spear","weapon",1],
             ["banner","other",25],
             ["warhorn","other",30] 

@@ -1,0 +1,24 @@
+{
+    "index":
+    [
+        ["banner", 1],
+        ["", 2],
+        ["", 3],
+        ["", 4],
+        ["", 5],
+        ["2h-sword", 6],
+        ["polearm", 7],
+        ["banner", 8],
+        ["", 9],
+        ["", 10]
+    ],
+    "list":
+    [
+            
+        {
+            "id":1,
+            "name":"banner",
+            "payload":[["effect",["banner"]]]
+        }
+    ]
+}

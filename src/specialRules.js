@@ -3,7 +3,6 @@
 
 const CombatSpecialRules = {
     BroadSword: 50001, // Clashmen
-    ...: 50002,
     Reroll_1s: 50003,  // poison, , others...
     Two_handed: 50004,  // -1
     Banner: 50005,

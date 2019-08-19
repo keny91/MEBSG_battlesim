@@ -1,8 +1,17 @@
+/**
+ * These document defines two main instances:
+ * 
+ * The miniature as an object instance created from a template profile () AND
+ * the combat ready unit that will be interacted with during the combat simulation (CombatUnit)
+ * 
+ * At the moment, the object option is also defined here. 
+ */
 
+
+const weapon = require("./weapon");
 
 
 var DEBUG_ON = 0;
-
 var DEBUG_COMBAT_MINI  = 0;
 
 
@@ -22,17 +31,6 @@ const OptionTypes = {
 }
 
 
-
-/**
- * Special attack may have an effect before or after combat.
- */
-const specialAttack = 
-{
-    faint:1,
-    backstab:2,
-    piercing:3,
-    stun:4
-}
 
 
 class Profile
@@ -188,7 +186,6 @@ class Option
 {
     constructor(struct_data, id)
     {
-
         function getUnitTemplate(id)
         {
             if (this.nof_units > 0)
@@ -196,10 +193,9 @@ class Option
                 for(var i = 0; i<this.nof_units; i++ )
                 {
                     if(this.units[i].id == id)
-                        return this.units[i];
-                    
-                }
-    
+                        return this.units[i];             
+                }   
+
                 // not found
                 if(DEBUG_ON)
                     console.log("getUnitTemplate - Unit Not found with id "+ id+ " may yet to be defined?");
@@ -225,7 +221,6 @@ class Option
                     if(entry[0] == name)
                         return getUnitTemplate(entry[1]);       
                 }
-    
             }
             else
             {
@@ -239,17 +234,13 @@ class Option
 
 
 
-        this.active = false;
-        this.id = id;
-        this.name = struct_data[0];
-        this.optionType = struct_data[1];
-        this.pointCost = struct_data[2];
+    this.active = false;
+    this.id = id;
+    this.name = struct_data[0];
+    this.optionType = struct_data[1];
+    this.pointCost = struct_data[2];
         
 
- 
-
-       // this.effects = struct_data.effects;
-       // this.effectIds = []; // ids to identify what effects did the  
     }
 
 
@@ -292,7 +283,8 @@ class CombatMiniature
     {
         this.labels = [];
         this.options = [];
-        this.weapons = [];
+        
+        this.weapons =  new weapon.Weapons(id);  // pass the combat unit Id
         this.name = unitTemplate.name;
         this.id = id;
 
@@ -301,6 +293,9 @@ class CombatMiniature
         this.isSpear = 0;
         this.isPike = 0; // 2-line support
         this.isHurtable = 0;
+        this.inBannerRange = 0;
+
+        
         
         this.isMounted = [-1,-1]; // [boolMounted?,MountName]
 
@@ -316,15 +311,13 @@ class CombatMiniature
 
         for(var i = 0; i < unitTemplate["weapons"].length; i++ )
         {
-            this.toogleWeapon(unitTemplate["weapons"][i]); // by default adding weapon
+            this.weapons.toogleWeapon(unitTemplate["weapons"][i]); // by default adding weapon
         }
 
         // this.weapons = unitTemplate["weapons"];
         this.points = unitTemplate.points;
         
         for (let i in unitTemplate.options) {
-            //console.log(unitTemplate.labels[label]);
-            // create option object
             let opt = new Option(unitTemplate.options[i],i);
             this.options.push(opt);
         }
@@ -338,199 +331,6 @@ class CombatMiniature
 
     }
     
-
-      /**   Payload data will help us track all the consecuences that we will or have enabled with it
-       * 
-       * @param {[tag1,contentValue1],[tag2,contentValue2]} payloadData     
-       * @param{int} Activating or deactivating the option
-       */
-    parsePayload(payloadData , revert = 0)
-    {
-
-        for(var i = 0; i<payloadData.length; i++ )
-        {
-            let hasSubfix = 0; // by default
-            let currentData = payloadData[i];
-            let subfix;
-
-            let str = payloadData[i].split("+");    
-            // no subfix
-            weaponName = str[0];
-            if(str.length>1)
-            {   
-                hasSubfix = 1;
-                if (str[1] != undefined)
-                    subfix = str[1];  
-                else 
-                    return -1;         // error statement
-            }
-                
-
-            
-            
-            // parse all options
-            switch(currentData[0])
-            {
-                case "enableSupport":
-                    this.isSupport = currentData[1];
-                    if(currentData[1] == 1)
-                        this.isSpear = !revert;
-                    else if (currentData[1] == 2)
-                        this.isPike = !revert;
-                    else if (currentData[1] == 3 && this.isMounted[0] == 0) // war spear
-                        this.isSpear = !revert;
-                    else
-                        this.isSupport = 0;
-                    
-                    break;
-
-                
-                case "containsWeapon":
-                    // we can add multiple weapons
-                    for(var j = 0; j<currentData[1].length; j++)
-                        {
-                            let weapon = currentData[1][j];
-                            // create a weapon option that is added as an option (no point cost since it should have been)
-                            this.toogleWeapon(weapon,revert);
-                        }
-                        // remove the current weapon
-                        return 2;
-                    break;
-
-                case "effect":
-                    if(subfix == undefined)
-                        return -1;
-
-                    parseEffect(subfix,revert); // implement this in effect
-
-                    break;
-
-                default:
-                    console.error("Payload Property not defined...");
-                    return -1;
-                    break;
-            }
-        }
-        return 1;
-    }
-
-    /** toogleWeapon
-     * 
-     * @param {*string} string weapon name as it appears on the official index 
-     * @param {*boolean} boolean adding or removing? 
-     */
-    toogleWeapon(FULLweaponName, remove)
-    {
-        var weaponProfile;
-        var weaponSpecial, weaponName;
-        var hasTHEweapon;
-        var rc ;
-
-
-        function HasWeapon(weaponName, weapons)
-        {
-            for(var i = 0; i<weapons.length; i++ )
-            {
-                if(weapons[i].name == weaponName)
-                    return 1;
-            }
-            return 0;
-        }
-
-        /**
-         * 
-         * @param {*string} weaponName 
-         */
-        function FindWeapon(weaponName)
-        {
-            var jsonRaw = require("./../options/weapons");
-            var weaponListIndex = jsonRaw.index;
-            for(var i = 0; i<weaponListIndex.length; i++ )
-            {
-                if(weaponListIndex[i][0] == weaponName)
-                {
-                    let listIndexId = weaponListIndex[i][1];
-                    let listId = jsonRaw.list[i]["id"];
-    
-                    if(listId != listIndexId)
-                    {
-                        console.error("Missmatch in Weapons, \""+listId+"\" with listIndex \""+listIndexId+"\"");
-                        return -1;
-                    }
-                    
-                    return jsonRaw.list[i];
-                }
-            }
-
-            // if we get here, it means that we did not found the weapon in the list
-            console.error("Weapon \""+weaponName+"\" not found at  \""+"./options/weapons"+"\" ...");
-            return -1;
-        
-        }
-
-        // Are we here to un/equip?
-
-        // Does the unit has such a weapon already?
-
-        // split subfixes to add effect to certain weapons ->  (WeaponName+Subfix)  Wher
-        var str = FULLweaponName.split("+");
-        // no subfix
-
-
-        weaponName = str[0];
-        if(str.length>1)
-            weaponSpecial = str[1];
-        // if(str[1] == "")
-        //     weaponSpecial = str[1];
-
-
-        // Find 
-        weaponProfile = FindWeapon(weaponName);
-        // Check if the requested item has been selected.
-        hasTHEweapon = HasWeapon(weaponName, this.weapons);
-
-        // Statement to admit adding a new weapon
-        if(hasTHEweapon && !remove)
-        {
-            console.error("Weapon \""+weaponName+"\" is already present in "+this.name+". With ID: "+this.id+".");
-            return -1; 
-        }
-
-        // Statement to admit adding a new weapon
-        if(!hasTHEweapon && remove)
-        {
-            console.error("Weapon \""+weaponName+"\" is NOT present in "+this.name+". With ID: "+this.id+".");
-            return -1; 
-        }
-
-        // weapon not found - for whatever reason
-        if(weaponProfile == -1)
-            return -1;
-       
-
-        /********************* PARSE WEAPON SPECIAL ******** */
-
-        if(weaponProfile.payload != undefined )
-        {
-            rc = this.parsePayload(weaponProfile.payload, remove);     
-        }
-
-        /* only add the weapon if the payload verifies it 
-        *   2  - means that payload does not require the weapon to be added
-        *   -1 - error happened
-        */
-        if (rc != 2 && rc != -1)
-        {
-            if (remove)
-                this.weapons.pop(weaponProfile);
-            else
-                this.weapons.push(weaponProfile);
-        }
-            
-
-        return 1;
-
-    }
 
 
     /**
@@ -569,9 +369,9 @@ class CombatMiniature
             case "weapon":
 
                 // turn the option into a weapon struct 
-                rc = this.toogleWeapon(theSelectedOption.name, revert);
+                rc = this.weapons.toogleWeapon(theSelectedOption.name, revert);
                 
-                //
+                // Debug
                 if(DEBUG_COMBAT_MINI )
                     console.log("add DEBUG info...");
 
