@@ -4,11 +4,43 @@ const weaponJson = require("./../options/weapons");
 
 const WeaponSpecial = 
 {
-  MasterCrafted: 201,
-  Elven: 202,
-  Poison: 203,
+  MasterCrafted: 'M',
+  Elven: 'E',
+  Poison: 'P',
   OTHER: 204
 }
+
+function parseWeaponSpecial(weaponProfile)
+{
+    var PreName;
+    var newName;
+    switch(weaponProfile.special)
+    {
+        case WeaponSpecial.MasterCrafted:
+                PreName = "Mastercrafted";
+            break;
+        
+        case WeaponSpecial.Elven:
+                PreName = "Elven";
+            break;
+
+        case WeaponSpecial.Poison:
+                PreName = "Poison";
+            break;
+        
+        default:
+                
+            break;
+
+    }
+    if(PreName)
+        newName=PreName+" "+weaponProfile.name;
+    else
+        newName=weaponProfile.name;
+
+    return newName;
+}
+
 
 /**
  *  Weapon carries the effects and maybe stats 
@@ -17,32 +49,20 @@ class Weapons
 {
     constructor(CombatUnitId)
     {
+
         this.parentUnitId = CombatUnitId;
-        this.name;
         this.selectable = 1; // if this weapon can be selected in the unit-weapon menu
-        this.weaponSpecial;
         this.selected = -1;  // no selection made
         this.nof_usable_weapons = 0;
+        this.usable_weapons = [];
         this.nof_weapons = 0;
         this.weaponList = [];
         this.isSupport = 0;
         this.isPike = 0;
         this.isSpear = 0;
 
-        // "specialAttack": "",
-        // "is2handed":0,
-        // "payload":[["enableSupport", 1]]
-
-        // this.selectIndex = weaponStruct.id;
-        // this.twoHanded = weaponStruct.is2handed;
-        // this.name = weaponStruct.name;
-        
-
-        // for (let prop in weaponStruct.specialAttack) 
-        // {
-        //     //console.log(unitTemplate.specialAttack[label]);
-        //     this.specialAttacks.push(weaponStruct.specialAttack[prop]);
-        // }
+        // init checksum value
+        this.checkSum = 0;
 
 
     }
@@ -53,7 +73,7 @@ class Weapons
        * @param {[tag1,contentValue1],[tag2,contentValue2]} payloadData     
        * @param{int} Activating or deactivating the option
        */
-      parsePayload(payloadData , revert = 0)
+      parsePayload(payloadData, weaponSpecial , revert = 0)
       {
   
           for(var i = 0; i<payloadData.length; i++ )
@@ -62,22 +82,7 @@ class Weapons
               let currentData = payloadData[i];
               let type = currentData[0];
               let additionalInfo = currentData[1];
-  
-              // let str = currentData.split("+");    
-              // // no subfix
-              // weaponName = str[0];
-              // if(str.length>1)
-              // {   
-              //     hasSubfix = 1;
-              //     if (str[1] != undefined)
-              //         subfix = str[1];  
-              //     else 
-              //         return -1;         // error statement
-              // }
-                  
-  
-              
-              
+                           
               // parse all options
               switch(type)
               {
@@ -104,12 +109,19 @@ class Weapons
                       for(var j = 0; j<additionalInfo.length; j++)
                           {
                               let weapon = additionalInfo[j];
+                              // if a weapon is special, the spawning weapons will also be
+                              if(weaponSpecial != undefined)
+                                weapon=weapon+"+"+weaponSpecial;
                               // create a weapon option that is added as an option (no point cost since it should have been)
                               this.toogleWeapon(weapon,revert);
                           }
                           // remove the current weapon - return 2
                           return 2;
                       break;
+
+                    case "isWeapon":
+        
+                    break;
   
                   case "effect":
                       if(subfix == undefined)
@@ -162,11 +174,22 @@ class Weapons
       }
 
 
-      HasWeapon(weaponName)
+      HasWeaponWithName(weaponName)
       {
           for(var i = 0; i<this.weaponList.length; i++ )
           {
               if(this.weaponList[i].name == weaponName)
+                  return i;
+          }
+          return -1;
+      }
+
+      
+      HasWeaponWithId(id)
+      {
+          for(var i = 0; i<this.weaponList.length; i++ )
+          {
+              if(this.weaponList[i].id == id)
                   return i;
           }
           return -1;
@@ -185,7 +208,7 @@ class Weapons
               if(weaponListIndex[i][0] == weaponName)
               {
                   let listIndexId = weaponListIndex[i][1];
-                  let listId = jsonRaw.list[i]["id"];
+                  let listId = jsonRaw.list[i]["weaponId"];
   
                   if(listId != listIndexId)
                   {
@@ -211,9 +234,9 @@ class Weapons
       {
           var weaponProfile;
           var weaponSpecial, weaponName;
-          var hasTHEweapon;
+          var hasTHEweapon, weaponPosition;
           var rc = 1 ;
-  
+
   
           // Are we here to un/equip?
   
@@ -221,23 +244,24 @@ class Weapons
   
           // split subfixes to add effect to certain weapons ->  (WeaponName+Subfix)  Wher
           var str = FULLweaponName.split("+");
-          // no subfix
   
   
+        // check for special attributes of the weapon - Poison;Mastercrafted;Elven
           weaponName = str[0];
           if(str.length>1)
               weaponSpecial = str[1];
-          // if(str[1] == "")
-          //     weaponSpecial = str[1];
+
   
+
   
           // Find 
           weaponProfile = this.FindWeapon(weaponName);
-          // Check if the requested item has been selected.
-          hasTHEweapon = (this.HasWeapon(weaponName) != -1);
+          // Check if the requested is in the list; and whats its position
+          weaponPosition = this.HasWeaponWithName(weaponName);
+          hasTHEweapon = (weaponPosition != -1);
   
           // Statement to admit adding a new weapon
-          if(hasTHEweapon && !remove)
+          if(hasTHEweapon  && !remove)
           {
               console.error("Weapon \""+weaponName+"\" is already present in "+this.name+". With ID: "+this.id+".");
               return -1; 
@@ -259,38 +283,66 @@ class Weapons
   
           if(weaponProfile.payload != undefined )
           {
-              rc = this.parsePayload(weaponProfile.payload, remove);     
+              
+              rc = this.parsePayload(weaponProfile.payload, weaponSpecial ,remove);     
           }
   
           /* only add the weapon if the payload verifies it 
-          *   2  - means that payload does not require the weapon to be added
+          *   2  - means that payload does not require the weapon to be added to the usable list-> NOT USABLE
           *   -1 - error happened
           */
           if (rc != -1)
           {
               if (remove)
               {
+                  // if is usable
                 if(rc != 2)
+                {
+                    let id_usable_array = -1;
+                    for(var i = 0; i<this.usable_weapons.length; i++ )
+                    {
+                        if (this.usable_weapons[i] == this.weaponList[weaponPosition].id)
+                            id_usable_array = i;
+                    }
+
+                    // check for WEIRD stuff
+                    if(id_usable_array == -1) {
+                        console.error("Did not find the Id_entifier in the weapon list that matches the one to be removed..."+ weaponProfile.id);
+                        return -1;
+                    }
+                    
+                    this.usable_weapons.splice(id_usable_array,1);
                     this.nof_usable_weapons--;
-                this.weaponList.pop(weaponProfile);
+                }
+                
+                weaponPosition = this.HasWeaponWithName(weaponName); // there is a chance that the payload has caused a change of order
+                this.weaponList.splice(weaponPosition,1);
                 this.nof_weapons--;
                 
               }
                   
               else
               {
+                // give it a Unique ID inside weapons
+                weaponProfile.id = this.checkSum++;
+                // Set special property to be used during combat
+                weaponProfile.special = weaponSpecial;
+                //
+                if(weaponProfile.displayName)
+                    weaponProfile.displayName = parseWeaponSpecial(weaponProfile);
                 this.weaponList.push(weaponProfile);
                 this.nof_weapons++;
                 if(rc != 2)
+                {
                     this.nof_usable_weapons++;
-
+                    this.usable_weapons.push(weaponProfile.id)
+                }
+                    
               }
                   
-          }
-              
+          }          
   
           return 1;
-  
       }
   
   

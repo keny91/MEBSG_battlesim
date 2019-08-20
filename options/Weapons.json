@@ -8,7 +8,7 @@
     ["2h-maze", 5],
     ["2h-sword", 6],
     ["polearm", 7],
-    ["", 8],
+    ["shield", 8],
     ["", 9],
     ["", 10]
 ],
@@ -16,49 +16,73 @@
     [
         
     {
-        "id":1,
+        "weaponId":1,
         "name":"sword",
         "specialAttack": ["faint"],
         "is2handed":0 
     },
     {
-        "id":2,
+        "weaponId":2,
         "name":"dagger",
         "specialAttack": ["faint"],
         "is2handed":0 
     },
     {
-        "id":3,
+        "weaponId":3,
         "name":"2h-axe",
         "specialAttack": ["piercing"],
         "is2handed":1 
     },
     {
-        "id":4,
+        "weaponId":4,
         "name":"spear",
         "specialAttack": "",
         "is2handed":0,
         "payload":[["enableSupport", 1]]
     },
     {
-        "id":5,
+        "weaponId":5,
         "name":"2h-maze",
         "specialAttack": ["stun"],
         "is2handed":1 
     },
     {
-        "id":6,
+        "weaponId":6,
         "name":"2h-sword",
         "specialAttack": [""],
         "is2handed":1 
     },
     {
-        "id":7,
+        "weaponId":7,
         "name":"polearm",
         "specialAttack": [""],
         "isNotSelectable": 1,
         "is2handed":1,
         "payload":[["containsWeapon", ["spear","2h-axe"]]]
+    },
+    {
+        "weaponId":8,
+        "name":"shield",
+        "specialAttack": ["shielding"],
+        "is2handed":0,
+        "payload":[["profile", ["D:+1"]]]
+    }
+    ,
+    {
+        "weaponId":9,
+        "name":"halfSword",
+        "specialAttack": ["shielding"],
+        "is2handed":0,
+        "payload":[["containsWeapon", ["sword","2h-sword"]]]
+    }
+    ,
+    {
+        "weaponId":9,
+        "name":"Anduril",
+        "specialAttack": ["shielding"],
+        "unique":["Anduril"],
+        "is2handed":-1,
+        "payload":[["isWeapon", "halfSword"]]
     }
     ],
     "version":"0.0.1"
