@@ -24,10 +24,10 @@ class Battle {
     }
 
 
-    /*  
-    
-    */
-
+    /**
+     * Before running the battle simulation, we must make sure that all the required
+     * values have been set.
+     */
     VerifyBattle()
     {
         let ready = 1;
@@ -54,6 +54,9 @@ class Battle {
 
     }
 
+    /**
+     * Are all units ready for battle? (all minis have made a choice of what weapon to use)
+     */
     AllUnitsArmed()
     {
 
@@ -67,5 +70,36 @@ class Battle {
         // the return indicates phase + unit index
         return ;
     }
+
+}
+
+
+
+
+class Side
+{
+    constructor()
+    {
+        this.nof_combatUnits = 0;
+        this.combatUnits = [];
+        this.supportGroups = [];
+    }
+
+    /**
+     * Find out if the assigned support units are correctly positioned.
+     * A (infantry) unit can be supported by another (infantry) with spear/ pikes.
+     * 2nd line Pikes can only support other pikes.
+     * Additional rules prevent support from acting, like "shielding" in the supported model.
+     */
+    validateSupportGroups()
+    {
+
+        return 0;
+
+        return 1;
+    }
+
+    validate
+
 
 }

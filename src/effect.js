@@ -19,8 +19,8 @@ const EffectTarget =
 const EffectPhases = 
 {
   Inmediate: 201,
-  preCombatPhase: 202,
-  postCombatPhase: 203,
+  preDuelPhase: 202,
+  postDuelPhase: 203,
   preHurtPhase: 204,
   postHurtPhase: 205,
 

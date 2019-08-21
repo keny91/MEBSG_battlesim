@@ -288,16 +288,17 @@ class CombatMiniature
         this.name = unitTemplate.name;
         this.id = id;
 
-        this.isSupport = 0; // change to [support?, type]
-        this.isSupporting_id = -1; // the mini id that is being supported [] <= I don´t know if this will be required.
-        this.isSpear = 0;
-        this.isPike = 0; // 2-line support
-        this.isHurtable = 0;
-        this.inBannerRange = 0;
+        this.status = new combatUnitStatus();
+        // this.isSupport = 0; // change to [support?, type]
+        // this.isSupportable = 1; // labels and special rules (ex. shielding) make a model unable to be supported.
+        //  // the mini id that is being supported [] <= I don´t know if this will be required.
+        // this.isSpear = 0;
+        // this.isPike = 0; // 2-line support
+        // this.isHurtable = 0;
+        // this.inBannerRange = 0;
 
-        
-        
-        this.isMounted = [-1,-1]; // [boolMounted?,MountName]
+        this.isSupporting_id = -1;
+        this.Mount = [-1,-1]; // [boolMounted?,MountName]
 
         
         // Check all players taking part in the match
@@ -419,6 +420,41 @@ class CombatMiniature
     
 }
 
+
+
+class combatUnitStatus
+{
+    constructor()
+    {
+        this.isProne = 0;
+        this.isCharging = 0;
+        this.isHurtable = 0;
+        this.isSupport = 0;
+        this.isPike = 0;
+        this.isSpear = 0;
+        this.isSupportable = 0;
+        this.isMounted = 0;
+        this.isInBannerRange = 0;
+        this.isBig = 0;
+        this.isUnarmed = 0;
+        this.isShielding = 0;
+        this.isStunned = 0;
+        this.isParalyzed = 0;
+        this.isTrapped = 0;
+        this.hasThrowingWeapon = 0;
+    }
+
+    /**
+     * There are status labels that cannot be active at the same time.
+     */
+    validateStatusLabels()
+    {
+
+    }
+
+
+
+}
 
 
 exports.Builder = Builder;
