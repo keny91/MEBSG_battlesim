@@ -111,6 +111,7 @@ class Builder
         this.nof_units = json_formated_file.units.length;
         this.units = [];
 
+        this.name = json_formated_file.name;
         this.index = json_formated_file.index;
         for(var i = 0; i<this.nof_units; i++ )
         {
@@ -279,23 +280,17 @@ class Option
 class CombatMiniature
 {
     // weapons is an array
-    constructor(unitTemplate, id)
+    constructor(unitTemplate, id, army)
     {
         this.labels = [];
         this.options = [];
-        
+        this.army = army;
         this.weapons =  new weapon.Weapons(id);  // pass the combat unit Id
         this.name = unitTemplate.name;
         this.id = id;
+        
 
         this.status = new combatUnitStatus();
-        // this.isSupport = 0; // change to [support?, type]
-        // this.isSupportable = 1; // labels and special rules (ex. shielding) make a model unable to be supported.
-        //  // the mini id that is being supported [] <= I don´t know if this will be required.
-        // this.isSpear = 0;
-        // this.isPike = 0; // 2-line support
-        // this.isHurtable = 0;
-        // this.inBannerRange = 0;
 
         this.isSupporting_id = -1;
         this.Mount = [-1,-1]; // [boolMounted?,MountName]
@@ -442,6 +437,7 @@ class combatUnitStatus
         this.isParalyzed = 0;
         this.isTrapped = 0;
         this.hasThrowingWeapon = 0;
+        /* This is very subjected to changes in the future */
     }
 
     /**

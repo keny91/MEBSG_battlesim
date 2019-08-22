@@ -4,10 +4,10 @@
 
 const rolls = require("./src/rolls");
 const { app, BrowserWindow } = require('electron');
-const fiefdoms = require("./Armies/Fiefdoms.json")
-const mordor = require("./Armies/Mordor.json")
-const mini = require("./src/mini")
-
+const fiefdoms = require("./Armies/Fiefdoms.json");
+const mordor = require("./Armies/Mordor.json");
+const mini = require("./src/mini");
+const combat = require("./src/combat");
 
 
 
@@ -392,7 +392,10 @@ function test()
     // Add units to the combat handler
     //var unit = armyFiefdoms.getIDbyUnitName("Blackroot Vale Archer");
     //console.log(unit);
-    var combatUnit = new mini.CombatMiniature(armyFiefdoms.getUnitTemplate(10)); // 10 for valeroot archer
+    var combatUnit = new mini.CombatMiniature(armyFiefdoms.getUnitTemplate(10), 1 ,armyFiefdoms.name); // 10 for valeroot archer
+
+    var battle = new combat.Battle();
+    battle.Side_A.addCombatUnit(10 ,armyFiefdoms);
     console.log(combatUnit);
 
     //handler.addUnit(combatUnit, team);
@@ -400,6 +403,7 @@ function test()
     combatUnit.toogleOption(0);
 
     console.log(combatUnit);
+
 
     combatUnit.toogleOption(0);
 
