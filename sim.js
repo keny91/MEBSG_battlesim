@@ -394,9 +394,11 @@ function test()
     //console.log(unit);
     var combatUnit = new mini.CombatMiniature(armyFiefdoms.getUnitTemplate(10), 1 ,armyFiefdoms.name); // 10 for valeroot archer
 
-    var battle = new combat.Battle();
-    battle.Side_A.addCombatUnit(10 ,armyFiefdoms);
+    var battle = new combat.Combat();
+    battle.Side_A.addCombatUnit(10 ,armyFiefdoms); // 10 is root vale archer
     console.log(combatUnit);
+
+    battle.Side_A.removeCombatUnit(0);
 
     //handler.addUnit(combatUnit, team);
     // combatUnit.toogleOption(5);

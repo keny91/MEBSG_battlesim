@@ -1,16 +1,52 @@
 
 const mini = require("./mini");
+const debug = 1;
+var DEBUG_BATTLE_ADMIN = 1;
+var COMBAT_LOG = 0;
+
+// Debugging
+if(DEBUG_BATTLE_ADMIN)
+{
+    /**
+     * 
+     * @param {*} string 
+     */
+    function LogProcess(string)
+    {
+        if (string)
+            console.log("\tLogCombat - "+string);
+    }
+
+}
+
+if(COMBAT_LOG)
+{
+        /**
+     * This will detail what happens during combat simulation
+     * "CombatUnit.name - Rolls 6"
+     * "Roll modifier -1 -> Final roll 5"
+     * ...
+     */
+    function CombatLog()
+    {
+        // to be implemented
+    }
+
+}
 
 
 
 
-
-
-class Battle {
+class Combat {
     constructor()
     {
+        if(DEBUG_BATTLE_ADMIN)
+            LogProcess("Combat object initializing.");
+
         this.Side_A = new Side(1); // ids of the minis
         this.Side_B = new Side(2);
+
+        this.SimulationStarted; // locks 
 
         // this is the current phase that is being resolved
         // 100 - 199 - 
@@ -21,16 +57,21 @@ class Battle {
         // Max 
         this.maxphaseIndex;
 
+        if(DEBUG_BATTLE_ADMIN)
+            LogProcess("Combat object created and initialized.");
+
         
     }
 
 
     /**
-     * Before running the battle simulation, we must make sure that all the required
+     * Before running the Combat simulation, we must make sure that all the required
      * values have been set.
      */
-    VerifyBattle()
+    VerifyCombat()
     {
+        if(DEBUG_BATTLE_ADMIN)
+            LogProcess("Verifying Combat...");
         let ready = 1;
         if(this.Side_A.length <= 0)
         {
@@ -46,12 +87,24 @@ class Battle {
 
         if(!this.AllUnitsArmed())
         {
-            console.error("Arm all warriors before starting the battle...");
+            console.error("Arm all warriors before starting the Combat...");
             ready= 0;
         }
 
+        
+
         if(ready)
-            console.log("BATTLE READY");
+        {
+            console.log("Combat READY");
+            if(DEBUG_BATTLE_ADMIN)
+                LogProcess("Verifying Combat... Succesful");
+        }
+        else
+        {
+            if(DEBUG_BATTLE_ADMIN)
+                LogProcess("Verifying Combat... Failed");
+        }
+            
 
     }
 
@@ -81,6 +134,9 @@ class Side
 {
     constructor(id)
     {
+        if(DEBUG_BATTLE_ADMIN)
+            LogProcess("\Side-"+id+" object initializing.");
+
         this.sideID = id;
         // init checksum value
         this.checkSum = 0;
@@ -95,7 +151,10 @@ class Side
         // things we might use in the future - status
         this.brokenArmy;
         this.deadLeader;
+        this.armyAlianceStatus; // green, red, yellow - historical, impossible, okish
 
+        if(DEBUG_BATTLE_ADMIN)
+            LogProcess("\Side-"+id+" object created.");
     }
 
     /**
@@ -128,6 +187,9 @@ class Side
     {
         var army = new mini.Builder(armyList);
         var referenceId = this.checkSum++;
+        if(DEBUG_BATTLE_ADMIN)
+            LogProcess("\tSide- "+referenceId+" adding CombatUnit with id -"+unitId+"- from army -"+armyList.name+"...");
+
         var combatUnit = new mini.CombatMiniature(army.getUnitTemplate(unitId),referenceId, army.name); 
 
 
@@ -162,31 +224,34 @@ class Side
         let removed = 0;
         for(var i = 0; i < this.combatUnits.length; i++ )
         {
-            if(this.combatUnits[i] == unitLocalId)
+            if(this.combatUnits[i].id == unitLocalId)
             {
                 //weaponPosition = this.HasWeaponWithName(weaponName); // there is a chance that the payload has caused a change of order
                 removeArmy = this.combatUnits[i].army;
                 this.combatUnits.splice(i,1);
                 this.nof_combatUnits--;
                 removed = 1;
+                break;
             }
         }
 
         if(removed && removeArmy != undefined)
         {
-            MAAAAAAL // -> check if other units have this army label
-            let j = containsArmyList(removeArmy);
-
             // if none -> remove the label
-            if (j !=-1)
+            if (!this.anyUnitsWithArmyList(removeArmy))
             {
-                this.combatUnits.splice(j,1);
+                let j  = this.containsArmyList(removeArmy)
+                this.armyLists.splice(j,1);
+
+                // no more units from the removed unit´s army -> remove army
+
+                // check for aliance update.
             }
             // otherwise let it be
             
         }
         else 
-            return 0;
+            return 1;
 
     }
 
@@ -204,6 +269,24 @@ class Side
             }
         }
         return -1;
+    }
+
+    /**
+     * Check if any of the units in this band belong to the Armylist
+     * @param {*} ArmyListId 
+     * @returns {} 1 or 0 if found or not
+     */
+    anyUnitsWithArmyList(ArmyListId)
+    {
+        for(var i = 0; i < this.combatUnits.length; i++ )
+        {
+            if(this.combatUnits[i].army == ArmyListID)
+            {
+                return 1; // found
+            }
+        }
+
+        return 0;
     }
 
     /**
@@ -240,4 +323,4 @@ class Side
 }
 
 
-exports.Battle = Battle;
+exports.Combat = Combat;

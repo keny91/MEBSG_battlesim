@@ -14,6 +14,21 @@ const weapon = require("./weapon");
 var DEBUG_ON = 0;
 var DEBUG_COMBAT_MINI  = 0;
 
+// Debugging
+if(DEBUG_COMBAT_MINI)
+{
+    /**
+     * 
+     * @param {*} string 
+     */
+    function LogProcess(string)
+    {
+        if (string)
+            console.log("\t\tLogMini - "+string);
+    }
+
+}
+
 
 function ejecutar(algunaFuncion, valor) 
 {
@@ -74,6 +89,7 @@ class HeroProfile
 // read the json and create a template for the unit
 class UnitBuilder
 {
+
     constructor(formated_struct)
     {
         this.id = formated_struct.id;
@@ -81,8 +97,9 @@ class UnitBuilder
         this.labels = [];
         this.options = [];
         
-        if(DEBUG_ON)
-            console.log("Loading Unit - "+ formated_struct.name);
+        if(DEBUG_COMBAT_MINI)
+            LogProcess("Loading Unit - "+ formated_struct.name);
+            
 
         // Check all players taking part in the match
         for (let label in formated_struct.labels) {
@@ -179,7 +196,7 @@ class Builder
 
 
 /**
- * ["spear","weapon",1],
+ *          ["spear","weapon",1],
             ["banner","other",25],
             ["warhorn","other",30] 
  */
