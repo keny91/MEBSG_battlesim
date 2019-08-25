@@ -290,18 +290,23 @@ class Side
     }
 
     /**
+     * Add an army list to the armies present in this side.
+     * Will skip if already exists.
      * 
-     * @param {*} ArmyListID_orName 
+     * @param {string} ArmyListID_orName - not clear yet
+     * @returns {boolean} 1 or 0 depending on success
      */
     addArmyList(ArmyListID)
     {
         
 
+        // check if already there
         if(containsArmyList(this.ArmyLists, ArmyListID))
         {
             // if found - don´t add
             return 0;
         }
+        // if not add it
         else 
         {
             this.ArmyLists.push(ArmyListID);

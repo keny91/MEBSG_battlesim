@@ -305,6 +305,7 @@ class CombatMiniature
         this.weapons =  new weapon.Weapons(id);  // pass the combat unit Id
         this.name = unitTemplate.name;
         this.id = id;
+        this.battleReady;
         
 
         this.status = new combatUnitStatus();

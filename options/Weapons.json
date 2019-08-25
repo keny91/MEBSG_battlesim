@@ -71,7 +71,8 @@
     {
         "weaponId":9,
         "name":"halfSword",
-        "specialAttack": ["shielding"],
+        "specialAttack": [""],
+        "isNotSelectable": 1,
         "is2handed":0,
         "payload":[["containsWeapon", ["sword","2h-sword"]]]
     }
@@ -79,7 +80,7 @@
     {
         "weaponId":9,
         "name":"Anduril",
-        "specialAttack": ["shielding"],
+        "specialAttack": [""],
         "unique":["Anduril"],
         "is2handed":-1,
         "payload":[["isWeapon", "halfSword"]]

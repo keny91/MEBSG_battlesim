@@ -51,7 +51,7 @@ class Weapons
     {
 
         this.parentUnitId = CombatUnitId;
-        this.selectable = 1; // if this weapon can be selected in the unit-weapon menu
+        // this.selectable = 1; // if this weapon can be selected in the unit-weapon menu
         this.selected = -1;  // no selection made
         this.nof_usable_weapons = 0;
         this.usable_weapons = [];
@@ -168,8 +168,30 @@ class Weapons
         return -1;
       }
 
-      SelectWeapon(weaponId)
+      /**
+       * 
+       * @param {*} weaponId 
+       * @param {*} useSpecial 
+       */
+      SelectWeapon(weaponId , useSpecial)
       {
+
+        function DeactivateOtherWeapons(weaponList)
+        {
+
+        }
+
+
+        function Is2handed(weaponProfile)
+        {
+
+        }
+
+        /**
+         * if one handed and no 2h weapon
+         */
+        function enableShield(){}
+
 
       }
 
