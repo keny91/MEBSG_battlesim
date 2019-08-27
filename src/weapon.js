@@ -176,13 +176,12 @@ class Weapons
       SelectWeapon(weaponId , useSpecial)
       {
 
-        function DeactivateOtherWeapons(weaponList)
+        function Is2handed(weaponProfile)
         {
 
         }
 
-
-        function Is2handed(weaponProfile)
+        function DeactivateOtherWeapons(weaponList)
         {
 
         }
@@ -191,6 +190,39 @@ class Weapons
          * if one handed and no 2h weapon
          */
         function enableShield(){}
+
+        /* if we select a weapon, several situations can happen:
+            1. Weapon is single handed, therefore, enabling to carry a second one
+                1.1. There was an ALT hand item already selected - shield? and something else? 
+                1.2. There was already a main 1h weapon selected - replace
+                1.3. No other weapon selected                    - See if there is a off-hand weapon available
+            2. 2 Handed 
+                2.1 JUST disable all previous weapons and go
+        */
+
+        // Get weapon "hands"
+
+        // Switch type of weapon
+
+        var weaponProfile = this.weaponList[weaponId];
+        // depending on how the weapon is handed, we pick a different procedure
+        switch(weaponProfile.hands)
+        {
+            case "twoHanded":
+
+            break;
+
+            case "mainHand":
+
+            break;
+
+            case "offHand":
+
+            break;
+
+            default:
+                break;
+        }
 
 
       }

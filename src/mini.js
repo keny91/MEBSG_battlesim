@@ -306,8 +306,10 @@ class CombatMiniature
         this.name = unitTemplate.name;
         this.id = id;
         this.battleReady;
-        this.weaponSelected = -1; // index of the weapon selected - is this battle ready?=
-        
+        this.weaponMainHand = -1; // index of the weapon selected - is this battle ready?=
+        this.weaponOffHand = -1;
+
+
 
         this.status = new combatUnitStatus();
 
