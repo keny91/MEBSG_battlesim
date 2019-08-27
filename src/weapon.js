@@ -367,7 +367,14 @@ class Weapons
           return 1;
       }
   
-  
+      /**
+       * 
+       * @param {*} id 
+       */
+      selectWeapon(id)
+      {
+
+      }
     
 }
 

@@ -188,7 +188,7 @@ class Side
         var army = new mini.Builder(armyList);
         var referenceId = this.checkSum++;
         if(DEBUG_BATTLE_ADMIN)
-            LogProcess("\tSide- "+referenceId+" adding CombatUnit with id -"+unitId+"- from army -"+armyList.name+"...");
+            LogProcess("\t<Side "+referenceId+"> adding CombatUnit with id -"+unitId+"- from army -"+armyList.name+"...");
 
         var combatUnit = new mini.CombatMiniature(army.getUnitTemplate(unitId),referenceId, army.name); 
 
@@ -320,6 +320,33 @@ class Side
      */
     armyReady()
     {
+
+        if(DEBUG_BATTLE_ADMIN)
+            LogProcess("\t<Side "+referenceId+"> checking if army is ready...");
+
+
+        // there are units
+        if(this.combatUnits.length == 0)
+        {
+            LogProcess("\t<Side "+referenceId+">  has no combat units...");
+            return 0;
+        }
+
+        // there are hurtable units on this side - only 
+        if(this.hurtableUnits.length == 0)
+        {
+            LogProcess("\t<Side "+referenceId+">  has no hurtable units...");
+            return 0;
+        }
+
+        // they are equiped
+        // for(var i = 0; i < this.combatUnits.length; i++ )
+        // {
+        //     if(this.combatUnits[i]. == ArmyListID)
+        //     {
+        //         return 1; // found
+        //     }
+        // }
 
     }
 

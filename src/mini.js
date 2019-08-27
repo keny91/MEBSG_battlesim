@@ -306,6 +306,7 @@ class CombatMiniature
         this.name = unitTemplate.name;
         this.id = id;
         this.battleReady;
+        this.weaponSelected = -1; // index of the weapon selected - is this battle ready?=
         
 
         this.status = new combatUnitStatus();
@@ -338,14 +339,25 @@ class CombatMiniature
 
         this.special = unitTemplate.special;
 
-        // now we work with the dices
-
-
-        
+        // now we work with the dices   
 
     }
     
 
+    selectWeapon(InternalWeaponId)
+    {
+        // cicle through the list of usable
+        if(this.weapons.selectWeapon(InternalWeaponId))
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+
+
+    }
 
     /**
      * Given the ID, add the option; Modify value points and add the 

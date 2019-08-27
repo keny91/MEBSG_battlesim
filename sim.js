@@ -398,11 +398,14 @@ function test()
     battle.Side_A.addCombatUnit(10 ,armyFiefdoms); // 10 is root vale archer
     console.log(combatUnit);
 
+    battle.Side_A.combatUnits[0].toogleOption(0);
+    battle.Side_A.combatUnits[0].toogleOption(1);
+
     battle.Side_A.removeCombatUnit(0);
 
     //handler.addUnit(combatUnit, team);
     // combatUnit.toogleOption(5);
-    combatUnit.toogleOption(0);
+    //combatUnit.toogleOption(0);
 
     console.log(combatUnit);
 
