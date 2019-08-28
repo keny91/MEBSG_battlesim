@@ -1,6 +1,20 @@
 
 const weaponJson = require("./../options/weapons");
 
+/**
+ * Weapons - This is a system that will add effects IF (and only if) the weapon is selected at the combat.
+ * 
+ *  Weapon-Special: an effect that can be applied to any weapon; ex. elven, mastercrafted
+ * 
+ *  Weapon special-strike: "stun", "piercing" and such.
+ * 
+ *  Adding a weapon as an option may have different consecuences:
+ *      - Adds multiple weapons at the same time (the original not being usable)
+ *      - Adds an effect to the list, linked to the weapon
+ *      - 
+ *  
+ */
+
 
 const WeaponSpecial = 
 {
