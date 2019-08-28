@@ -78,7 +78,25 @@
     }
     ,
     {
-        "weaponId":9,
+        "weaponId":10,
+        "name":"warspear",
+        "specialAttack": [""],
+        "isNotSelectable": 1,
+        "hands":0,
+        "payload":[["containsWeapon", ["spear","lance"]]]
+    }
+    ,
+    {
+        "weaponId":11,
+        "name":"lance",
+        "specialAttack": [""],
+        "isNotSelectable": 1,
+        "hands":0,
+        "payload":[["effect", ["lance-bonus"]]]
+    }
+    ,
+    {
+        "weaponId":12,
         "name":"Anduril",
         "specialAttack": [""],
         "unique":["Anduril"],

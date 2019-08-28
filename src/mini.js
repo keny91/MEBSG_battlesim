@@ -314,6 +314,7 @@ class CombatMiniature
         this.status = new combatUnitStatus();
 
         this.isSupporting_id = -1;
+        this.supports = [0,-1];
         this.Mount = [-1,-1]; // [boolMounted?,MountName]
 
         
@@ -399,9 +400,12 @@ class CombatMiniature
                 // turn the option into a weapon struct 
                 rc = this.weapons.toogleWeapon(theSelectedOption.name, revert);
                 
-                // Debug
-                if(DEBUG_COMBAT_MINI )
-                    console.log("add DEBUG info...");
+                // if Toogling returns 
+                if(rc == 101)
+                {
+                    if(revert)
+                        this.supports = [0,-1];
+                }
 
             break;
 
