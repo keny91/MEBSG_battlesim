@@ -399,7 +399,10 @@ function test()
     console.log(combatUnit);
 
     battle.Side_A.combatUnits[0].toogleOption(0);
-    battle.Side_A.combatUnits[0].toogleOption(1);
+    //battle.Side_A.combatUnits[0].toogleOption(1);
+    battle.Side_A.combatUnits[0].selectWeapon(0);
+    battle.Side_A.StartBattle();
+
 
     battle.Side_A.removeCombatUnit(0);
 

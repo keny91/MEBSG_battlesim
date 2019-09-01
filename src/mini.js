@@ -350,7 +350,7 @@ class CombatMiniature
     selectWeapon(InternalWeaponId)
     {
         // cicle through the list of usable
-        if(this.weapons.selectWeapon(InternalWeaponId))
+        if(this.weapons.SelectWeapon(InternalWeaponId))
         {
             return 1;
         }

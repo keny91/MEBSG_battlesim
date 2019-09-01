@@ -61,6 +61,7 @@ function parseWeaponSpecial(weaponProfile)
  */
 class Weapons
 {
+    
     constructor(CombatUnitId)
     {
 
@@ -74,13 +75,19 @@ class Weapons
         this.isSupport = 0;
         this.isPike = 0;
         this.isSpear = 0;
+        this.handed =
+            {
+            MainHand: -1,
+            Offhand: -1,
+            twoHanded : 0,
+            specialAttack: ""
+            };
 
         // init checksum value
         this.checkSum = 0;
 
 
     }
-
 
           /**   Payload data will help us track all the consecuences that we will or have enabled with it
        * 
@@ -182,12 +189,29 @@ class Weapons
         return -1;
       }
 
+
+
       /**
        * 
-       * @param {*} weaponId 
+       * @param {*} weaponInternalID 
+       */
+      FindWeaponById(weaponInternalID)
+      {
+        for(var i = 0; i<this.weaponList.length; i++ )
+          {
+            if(this.weaponList[i].id == weaponInternalID)
+                return i;
+          }
+
+        return -1;
+      }
+
+      /**
+       * 
+       * @param {*} InternalWeaponId 
        * @param {*} useSpecial 
        */
-      SelectWeapon(weaponId , useSpecial)
+      SelectWeapon(InternalWeaponId , useSpecial = 0)
       {
 
         function Is2handed(weaponProfile)
@@ -212,32 +236,105 @@ class Weapons
                 1.3. No other weapon selected                    - See if there is a off-hand weapon available
             2. 2 Handed 
                 2.1 JUST disable all previous weapons and go
+
+            3. If special is selected, add effect
+                3.1 Disable any other specials after selecting this one.
+
+        
         */
 
-        // Get weapon "hands"
-
+        
+        var weaponProfile; 
+        var arrayPosition = -1;
         // Switch type of weapon
+        for(var i = 0; i < this.usable_weapons.length; i++ )
+        {
+            //this.weapons.toogleWeapon(unitTemplate["weapons"][i]); // by default adding weapon
+            if(InternalWeaponId == this.usable_weapons[i])
+            {
+                arrayPosition = this.FindWeaponById(InternalWeaponId);
+                // not found
+                if(arrayPosition != -1)
+                    break;
+            }
+            if(arrayPosition!=-1)
+                break;
+        }
 
-        var weaponProfile = this.weaponList[weaponId];
+        
+
+        if(arrayPosition == -1)
+        {
+            console.error("Invalid index ID: "+InternalWeaponId+" - not found in the list." );
+            return -1;
+        }
+        else
+        {
+            var weaponProfile = this.weaponList[InternalWeaponId];
+        }
+
+        if(weaponProfile.isNotSelectable !=undefined)
+            {
+                console.error("Invalid weapon selected with ID: "+InternalWeaponId );
+                return -1;
+            }
+
         // depending on how the weapon is handed, we pick a different procedure
         switch(weaponProfile.hands)
         {
             case "twoHanded":
+                // disable any other weapons
+                // if(this.handed.twoHanded)
+                // {
+
+                // }
+
+                // Does not matter prior to this one -Z overwrite
+                this.handed.MainHand = InternalWeaponId;
+                this.handed.Offhand = InternalWeaponId;
+                this.handed.twoHanded = 1;
+
 
             break;
 
             case "mainHand":
+                // disable previous main hand / off hand if 2 handed
+                if(this.handed.twoHanded)
+                {
+                    this.handed.Offhand = -1;
+                }
+                this.handed.MainHand = InternalWeaponId;
+                this.handed.twoHanded = 0;
 
             break;
 
             case "offHand":
+                // disable previous off hand
+                if(this.handed.twoHanded)
+                {
+                    this.handed.MainHand = -1;
+                }
+                this.handed.Offhand = InternalWeaponId;
+                this.handed.twoHanded = 0;
 
             break;
 
             default:
                 break;
+
+            
         }
 
+
+        // chech if we have to enable the special
+        if(useSpecial)
+        {
+            this.handed.specialAttack = weaponProfile.specialAttack;
+        }
+        else
+            this.handed.specialAttack = weaponProfile.specialAttack;
+
+        return 1;
 
       }
 
@@ -262,6 +359,8 @@ class Weapons
           }
           return -1;
       }
+
+
 
       /**
        * 
@@ -328,17 +427,17 @@ class Weapons
           weaponPosition = this.HasWeaponWithName(weaponName);
           hasTHEweapon = (weaponPosition != -1);
   
-          // Statement to admit adding a new weapon
+          // Statement to admit adding/remove a weapon
           if(hasTHEweapon  && !remove)
           {
-              console.error("Weapon \""+weaponName+"\" is already present in "+this.name+". With ID: "+this.id+".");
+              console.error("Weapon \""+weaponName+"\" is already present in "+this.name+". With ID: "+this.parentUnitId+".");
               return -1; 
           }
   
           // Statement to remove adding an existing weapon
           if(!hasTHEweapon && remove)
           {
-              console.error("Weapon \""+weaponName+"\" is NOT present in "+this.name+". With ID: "+this.id+".");
+              console.error("Weapon \""+weaponName+"\" is NOT present in "+this.name+". With ID: "+this.parentUnitId+".");
               return -1; 
           }
   
@@ -413,14 +512,6 @@ class Weapons
           return 1;
       }
   
-      /**
-       * 
-       * @param {*} id 
-       */
-      selectWeapon(id)
-      {
-
-      }
     
 }
 

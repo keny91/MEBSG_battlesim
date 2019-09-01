@@ -63,6 +63,15 @@ class Combat {
         
     }
 
+    // transition from 
+    StartBattle()
+    {
+        // verify integrity first
+        this.VerifyCombat();
+        // OK? - start simulation
+
+
+    }
 
     /**
      * Before running the Combat simulation, we must make sure that all the required
@@ -70,6 +79,42 @@ class Combat {
      */
     VerifyCombat()
     {
+        function verifySide(Side_)
+        {
+            if(!Side_ instanceof Side)
+            {
+                return -1;
+            }
+
+            // combat unit check - combatUnits.length
+            if(nof_combatUnits<=0)
+            {
+                console.error("Side -"+Side_.sideID+" has NO combats units ready...");
+                return -1;
+            }
+
+            // hurtable units check
+            if(hurtableUnits.length<=0)
+            {
+                console.error("Side -"+Side_.sideID+" has NO units to be HURT in combat...");
+                return -1;
+            }
+
+            // make sure that supports are VALID and ASSIGNED
+            // if(Side_.validateSupport())
+            // {
+            //     console.error("Side -"+Side_.sideID+" has NO combats units ready");
+            //     return -1;
+            // }
+
+            // All units have a weapon assigned
+            // if(Side_.AllUnitsArmed)
+            // {
+            //     console.error("Side -"+Side_.sideID+" has NO units to be HURT in combat...");
+            //     return -1;
+            // }
+        }
+
         if(DEBUG_BATTLE_ADMIN)
             LogProcess("Verifying Combat...");
         let ready = 1;
@@ -79,7 +124,7 @@ class Combat {
             ready = 0;
         }
 
-        if(this.Side_A.length <= 0)
+        if(this.Side_B.length <= 0)
         {
             console.error("There are no contenders froms side B...");
             ready= 0;
