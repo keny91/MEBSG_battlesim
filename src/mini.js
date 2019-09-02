@@ -319,7 +319,8 @@ class CombatMiniature
 
         
         // Check all players taking part in the match
-        for (let label in unitTemplate.labels) {
+        for (let label in unitTemplate.labels) 
+        {
             //console.log(unitTemplate.labels[label]);
             this.labels.push(unitTemplate.labels[label]);
         }

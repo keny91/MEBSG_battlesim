@@ -87,18 +87,13 @@ class Combat {
             }
 
             // combat unit check - combatUnits.length
-            if(nof_combatUnits<=0)
+            if(!Side_.armyReady())
             {
-                console.error("Side -"+Side_.sideID+" has NO combats units ready...");
-                return -1;
+                console.error("Side -"+Side_.sideID+"...Arm all warriors before starting the Combat!");
+                // console.error("Side -"+Side_.sideID+" has NO units to be HURT in combat...");
+                return 0;
             }
 
-            // hurtable units check
-            if(hurtableUnits.length<=0)
-            {
-                console.error("Side -"+Side_.sideID+" has NO units to be HURT in combat...");
-                return -1;
-            }
 
             // make sure that supports are VALID and ASSIGNED
             // if(Side_.validateSupport())
@@ -108,11 +103,16 @@ class Combat {
             // }
 
             // All units have a weapon assigned
-            // if(Side_.AllUnitsArmed)
-            // {
-            //     console.error("Side -"+Side_.sideID+" has NO units to be HURT in combat...");
-            //     return -1;
-            // }
+        //     if(Side_.AllUnitsArmed())
+        //     {
+        //         console.error("Side -"+Side_.sideID+"...Arm all warriors before starting the Combat!");
+        //         // console.error("Side -"+Side_.sideID+" has NO units to be HURT in combat...");
+        //         return 0;
+        //                 //     
+        // //     ready= 0;
+        //     }
+
+        return 1;
         }
 
         if(DEBUG_BATTLE_ADMIN)
@@ -130,11 +130,14 @@ class Combat {
             ready= 0;
         }
 
-        if(!this.AllUnitsArmed())
-        {
-            console.error("Arm all warriors before starting the Combat...");
-            ready= 0;
-        }
+            /**
+     * Are all units ready for battle? (all minis have made a choice of what weapon to use)
+     */
+        // if(!this.AllUnitsArmed())
+        // {
+        //     console.error("Arm all warriors before starting the Combat!");
+        //     ready= 0;
+        // }
 
         
 
@@ -150,16 +153,9 @@ class Combat {
                 LogProcess("Verifying Combat... Failed");
         }
             
-
     }
 
-    /**
-     * Are all units ready for battle? (all minis have made a choice of what weapon to use)
-     */
-    AllUnitsArmed()
-    {
 
-    }
 
     // progresses through each unit in each phase
     next()
@@ -384,16 +380,27 @@ class Side
             return 0;
         }
 
-        // they are equiped
-        // for(var i = 0; i < this.combatUnits.length; i++ )
-        // {
-        //     if(this.combatUnits[i]. == ArmyListID)
-        //     {
-        //         return 1; // found
-        //     }
-        // }
+        //  they are equiped
+        for(var i = 0; i < this.combatUnits.length; i++ )
+        {
+            // check main-hand
+            if(this.combatUnits[i].weaponMainHand == -1)
+            {
+                LogProcess("\t<Side "+referenceId+"> NOT ready... CombatUnit "+this.combatUnits[i].id+" - "+this.combatUnits[i].name);
+                return -1; // found
+            }
 
+
+            //   
+            // {
+
+            // }
+            
+        }
+
+        return 1;
     }
+    
 
 
 
