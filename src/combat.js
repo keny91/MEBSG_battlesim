@@ -86,6 +86,12 @@ class Combat {
                 return -1;
             }
 
+            if(Side_.armyLists.length <= 0)
+            {
+                console.error("There are no contenders froms side A...");
+                ready = 0;
+            }
+
             // combat unit check - combatUnits.length
             if(!Side_.armyReady())
             {
@@ -118,17 +124,31 @@ class Combat {
         if(DEBUG_BATTLE_ADMIN)
             LogProcess("Verifying Combat...");
         let ready = 1;
-        if(this.Side_A.length <= 0)
-        {
-            console.error("There are no contenders froms side A...");
-            ready = 0;
-        }
 
-        if(this.Side_B.length <= 0)
+
+        // if(this.Side_A.armyLists.length <= 0)
+        // {
+        //     console.error("There are no contenders froms side A...");
+        //     ready = 0;
+        // }
+
+        // if(this.Side_B.armyLists.length <= 0)
+        // {
+        //     console.error("There are no contenders froms side B...");
+        //     ready= 0;
+        // }
+
+        if(verifySide(this.Side_B))
         {
             console.error("There are no contenders froms side B...");
             ready= 0;
         }
+
+        if(verifySide(this.Side_A))
+        {
+            ready= 0;
+        }
+
 
             /**
      * Are all units ready for battle? (all minis have made a choice of what weapon to use)
@@ -145,7 +165,7 @@ class Combat {
         {
             console.log("Combat READY");
             if(DEBUG_BATTLE_ADMIN)
-                LogProcess("Verifying Combat... Succesful");
+                LogProcess("Verifying Combat... Succesfull");
         }
         else
         {
@@ -363,20 +383,20 @@ class Side
     {
 
         if(DEBUG_BATTLE_ADMIN)
-            LogProcess("\t<Side "+referenceId+"> checking if army is ready...");
+            LogProcess("\t<Side "+this.sideID+"> checking if army is ready...");
 
 
         // there are units
         if(this.combatUnits.length == 0)
         {
-            LogProcess("\t<Side "+referenceId+">  has no combat units...");
+            LogProcess("\t<Side "+this.sideID+">  has no combat units...");
             return 0;
         }
 
         // there are hurtable units on this side - only 
         if(this.hurtableUnits.length == 0)
         {
-            LogProcess("\t<Side "+referenceId+">  has no hurtable units...");
+            LogProcess("\t<Side "+this.sideID+">  has no hurtable units...");
             return 0;
         }
 
@@ -386,7 +406,7 @@ class Side
             // check main-hand
             if(this.combatUnits[i].weaponMainHand == -1)
             {
-                LogProcess("\t<Side "+referenceId+"> NOT ready... CombatUnit "+this.combatUnits[i].id+" - "+this.combatUnits[i].name);
+                LogProcess("\t<Side "+this.sideID+"> NOT ready... CombatUnit "+this.combatUnits[i].id+" - "+this.combatUnits[i].name);
                 return -1; // found
             }
 
