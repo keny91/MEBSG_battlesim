@@ -68,15 +68,20 @@
             },
             "equipment":
             [
-                "sword","pick"
+                
+            ],
+            "weapons":
+            [
+                "sword","axe"
             ],
             "options":
             [
-                ["shield",1],
-                ["spear",1],
-                ["orc_bow",1],
-                ["2-h",1],
-                ["banner",25]
+                ["shield","weapon",1],
+                ["spear","weapon",1],
+                ["orc_bow","weapon",1],
+                ["axe-2h","weapon",1],
+                ["axe-2h","weapon",1],
+                ["banner","other",25]
             ],
             "special":
             [
@@ -109,9 +114,9 @@
             ],
             "options":
             [
-                ["shield",1],
-                ["spear",1],
-                ["banner",25]
+                ["shield","weapon",1],
+                ["spear","weapon",1],
+                ["banner","other",25]
             ],
             "special":
             [

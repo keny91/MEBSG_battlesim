@@ -43,8 +43,8 @@ class Combat {
         if(DEBUG_BATTLE_ADMIN)
             LogProcess("Combat object initializing.");
 
-        this.Side_A = new Side(1); // ids of the minis
-        this.Side_B = new Side(2);
+        this.Side_1 = new Side(1); // ids of the minis
+        this.Side_2 = new Side(2);
 
         this.SimulationStarted; // locks 
 
@@ -138,13 +138,13 @@ class Combat {
         //     ready= 0;
         // }
 
-        if(verifySide(this.Side_B))
+        if(verifySide(this.Side_1))
         {
             console.error("There are no contenders froms side B...");
             ready= 0;
         }
 
-        if(verifySide(this.Side_A))
+        if(verifySide(this.Side_2))
         {
             ready= 0;
         }
@@ -407,7 +407,7 @@ class Side
             if(this.combatUnits[i].weaponMainHand == -1)
             {
                 LogProcess("\t<Side "+this.sideID+"> NOT ready... CombatUnit "+this.combatUnits[i].id+" - "+this.combatUnits[i].name);
-                return -1; // found
+                return 0; // found
             }
 
 

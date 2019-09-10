@@ -276,8 +276,8 @@ class BattleHandler
 {
     constructor()
     {
-        this.teamA = [];
-        this.teamB = []
+        this.team1 = [];
+        this.team2 = []
         this.iniciative; // 1 -> team A ; 2 -> team B ; 0 -> undecided (let it be rand) 
         this.setup = []; // Is this decision phase
         this.ChargePhaseEffects = [];  // this is
@@ -387,7 +387,7 @@ function test()
     // console.log(armyMordor);
 
     // Combat handler instance that will take the reins of the battle
-    var handler = new BattleHandler();
+    //var handler = new BattleHandler();
 
     // Add units to the combat handler
     //var unit = armyFiefdoms.getIDbyUnitName("Blackroot Vale Archer");
@@ -395,16 +395,21 @@ function test()
     var combatUnit = new mini.CombatMiniature(armyFiefdoms.getUnitTemplate(10), 1 ,armyFiefdoms.name); // 10 for valeroot archer
 
     var battle = new combat.Combat();
-    battle.Side_A.addCombatUnit(10 ,armyFiefdoms); // 10 is root vale archer
+    battle.Side_1.addCombatUnit(10 ,armyFiefdoms); // 10 is root vale archer
+    battle.Side_2.addCombatUnit(27,armyMordor);
     console.log(combatUnit);
 
-    battle.Side_A.combatUnits[0].toogleOption(0);
-    //battle.Side_A.combatUnits[0].toogleOption(1);
-    battle.Side_A.combatUnits[0].selectWeapon(0);
+    battle.Side_1.combatUnits[0].toogleOption(0);
+    //battle.Side_1.combatUnits[0].toogleOption(1);
+    battle.Side_1.combatUnits[0].selectWeapon(0);
+
+    //battle.Side_2.combatUnits[0].toogleOption(0);
+    //battle.Side_1.combatUnits[0].toogleOption(1);
+    battle.Side_2.combatUnits[0].selectWeapon(0);
     battle.StartBattle();
 
 
-    battle.Side_A.removeCombatUnit(0);
+    battle.Side_1.removeCombatUnit(0);
 
     //handler.addUnit(combatUnit, team);
     // combatUnit.toogleOption(5);
