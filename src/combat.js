@@ -138,13 +138,12 @@ class Combat {
         //     ready= 0;
         // }
 
-        if(verifySide(this.Side_1))
+        if(!verifySide(this.Side_1))
         {
-            console.error("There are no contenders froms side B...");
             ready= 0;
         }
 
-        if(verifySide(this.Side_2))
+        if(!verifySide(this.Side_2))
         {
             ready= 0;
         }
@@ -262,6 +261,13 @@ class Side
             {
                 // new army
                 this.armyLists.push(combatUnit.army);
+
+                /***
+                 *  THIS SHOULD BE CHANGED OR REVAMPED AT SOME POINT
+                 * 
+                 *  Currently adding any units to the hurtable list
+                 */
+                this.hurtableUnits.push(combatUnit.id);
             }
             else
             {
@@ -404,7 +410,7 @@ class Side
         for(var i = 0; i < this.combatUnits.length; i++ )
         {
             // check main-hand
-            if(this.combatUnits[i].weaponMainHand == -1)
+            if(this.combatUnits[i].getWeapon("mainHand") == -1)
             {
                 LogProcess("\t<Side "+this.sideID+"> NOT ready... CombatUnit "+this.combatUnits[i].id+" - "+this.combatUnits[i].name);
                 return 0; // found
@@ -417,6 +423,8 @@ class Side
             // }
             
         }
+
+        LogProcess("\t<Side "+this.sideID+">  READY");
 
         return 1;
     }

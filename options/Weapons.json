@@ -9,7 +9,10 @@
     ["2h-sword", 6],
     ["polearm", 7],
     ["shield", 8],
-    ["", 9],
+    ["halfSword", 9],
+    ["warspear", 10],
+    ["lance", 11],
+    ["axe", 12],
     ["", 10]
 ],
 "list":
@@ -91,12 +94,19 @@
         "name":"lance",
         "specialAttack": [""],
         "isNotSelectable": 1,
-        "hands":0,
+        "hands":"mainHand",
         "payload":[["effect", ["lance-bonus"]]]
     }
     ,
     {
         "weaponId":12,
+        "name":"axe",
+        "specialAttack": ["piercing"],
+        "hands":"mainHand"
+    }
+    ,
+    {
+        "weaponId":13,
         "name":"Anduril",
         "specialAttack": [""],
         "unique":["Anduril"],

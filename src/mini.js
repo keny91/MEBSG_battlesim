@@ -449,6 +449,34 @@ class CombatMiniature
 
     }
 
+
+    getWeapon(position)
+    {
+
+        let weapon = this.weapons;
+        switch(position)
+        {
+            case "mainHand":
+                return this.weapons.handed.MainHand;
+                break;
+            
+            case "offHand":
+                return this.weapons.handed.Offhand;
+                break;
+
+            case "twoHanded":
+                return this.weapons.handed.twoHanded;
+                break;
+
+            default:
+                return -1;
+                break;
+        }
+
+        // otherwise return error
+        return -1;
+    }
+
     
 }
 

@@ -332,7 +332,7 @@ class Weapons
             this.handed.specialAttack = weaponProfile.specialAttack;
         }
         else
-            this.handed.specialAttack = weaponProfile.specialAttack;
+            this.handed.specialAttack = -1;
 
         return 1;
 
