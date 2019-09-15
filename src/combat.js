@@ -1,5 +1,7 @@
 
 const mini = require("./mini");
+const dices = require("./rolls");
+
 const debug = 1;
 var DEBUG_BATTLE_ADMIN = 1;
 var COMBAT_LOG = 0;
@@ -29,12 +31,85 @@ if(COMBAT_LOG)
      */
     function CombatLog()
     {
+        
         // to be implemented
     }
 
 }
 
 
+class Roll
+{
+    constructor(unit, id)
+    {
+        if(!(unit instanceof mini.CombatMiniature))
+        {
+            return -1;
+        }
+
+        this.strength = unit.profile.S;
+        this.combat = unit.profile.F;
+        this.specials = -1;
+        this.effects = [];
+        this.result =  -1;
+        this.attackId = id;
+        this.unitId = unit.id;
+    }
+
+
+    rollTheDice()
+    {
+        this.result = rolls.rollD6();
+    }
+}
+
+class Rolls
+{
+
+
+
+    constructor(Side_)
+    {
+        this.rolls = null;
+        if(!(Side_ instanceof Side))
+        {
+            return -1;
+        }
+
+        this.rolls = this.getRolls(Side_);
+
+        // We get this by ordering the Opposite side hurtable units.
+        // Depends on which target IA is selected.
+        this.targetOrder =[];
+
+        
+
+    }
+
+    getRolls(Side_)
+    {
+        var rolls_ = [];
+
+        // Go over each of 
+        for(let i = 0; i < Side_.combatUnits.length; i++ )
+        {
+            // 
+            let unit = Side_.combatUnits[i];
+
+            // create a roll from each attack with the same propertie
+            for(let j = 0; j < unit.profile.A; j++)
+            {
+                rolls_.push(new Roll(unit,j));
+            }
+        }
+
+        return rolls_;
+    
+    }
+
+
+
+}
 
 
 class Combat {
@@ -45,6 +120,9 @@ class Combat {
 
         this.Side_1 = new Side(1); // ids of the minis
         this.Side_2 = new Side(2);
+
+        this.rolls_Side_1 = null;
+        this.rolls_Side_2 = null;
 
         this.SimulationStarted; // locks 
 
@@ -63,12 +141,17 @@ class Combat {
         
     }
 
+
+
     // transition from 
     StartBattle()
     {
         // verify integrity first
         this.VerifyCombat();
         // OK? - start simulation
+
+        //
+        this.Simulate();
 
 
     }
@@ -175,6 +258,50 @@ class Combat {
     }
 
 
+    /**
+     * THIS IS A SCRIPTED PROCESS
+     */
+    Simulate()
+    {
+
+        function rollAttacks(rollstruct)
+        {
+            // side 1
+            rollstruct.rolls_Side_1;
+            rollstruct.rolls_Side_1.rolls;
+            dices.rollD6();
+        }
+
+        function combatPhase()
+        {
+            rollAttacks();
+        }
+
+        if(DEBUG_BATTLE_ADMIN)
+            LogProcess("Starting combat simulation for combat...");
+
+        // Get the dices to be rolled
+        this.CreateRolls();
+
+
+        // 
+        combatPhase(this);
+
+        
+    }
+
+    CreateRolls()
+    {
+        this.rolls_Side_1 = new Rolls(this.Side_1);
+        if(DEBUG_BATTLE_ADMIN)
+            LogProcess("\t \'"+this.rolls_Side_1.rolls.length+"\' d6 Combat rolls created for side \'"+this.Side_1.sideID+"\'");
+    
+
+        this.rolls_Side_2 = new Rolls(this.Side_2);
+        if(DEBUG_BATTLE_ADMIN)
+            LogProcess("\t \'"+this.rolls_Side_2.rolls.length+"\' d6 Combat rolls created for side \'"+this.Side_2.sideID+"\'");
+    
+    }
 
     // progresses through each unit in each phase
     next()

@@ -396,12 +396,14 @@ function test()
 
     var battle = new combat.Combat();
     battle.Side_1.addCombatUnit(10 ,armyFiefdoms); // 10 is root vale archer
+    battle.Side_1.addCombatUnit(10 ,armyFiefdoms);
     battle.Side_2.addCombatUnit(27,armyMordor);
     console.log(combatUnit);
 
     battle.Side_1.combatUnits[0].toogleOption(0);
     //battle.Side_1.combatUnits[0].toogleOption(1);
     battle.Side_1.combatUnits[0].selectWeapon(0);
+    battle.Side_1.combatUnits[1].selectWeapon(0);
 
     //battle.Side_2.combatUnits[0].toogleOption(0);
     //battle.Side_1.combatUnits[0].toogleOption(1);
@@ -409,7 +411,9 @@ function test()
     battle.StartBattle();
 
 
-    battle.Side_1.removeCombatUnit(0);
+
+
+   // battle.Side_1.removeCombatUnit(0);
 
     //handler.addUnit(combatUnit, team);
     // combatUnit.toogleOption(5);
