@@ -54,12 +54,28 @@ class Roll
         this.result =  -1;
         this.attackId = id;
         this.unitId = unit.id;
+        this.hasElvenWeapon = 0;
     }
 
 
     rollTheDice()
     {
-        this.result = rolls.rollD6();
+        this.result = dices.rollD6();
+    }
+
+    getUnitId()
+    {
+        return this.unitId;
+    }
+
+    getDiceId()
+    {
+        return this.attackId;
+    }
+
+    getResult()
+    {
+        return this.result;
     }
 }
 
@@ -107,6 +123,100 @@ class Rolls
     
     }
 
+    /** Return all rolls that belong to the specified Id
+     * 
+     * @param {*} unitId 
+     */
+    getAllrollesWithID(unitId)
+    {
+        let rollArray = [];
+        for(let i =0; i< this.rolls.length; i++)
+        {
+            if(this.rolls[i].getUnitId() == unitId)
+            {
+                rollArray.push(this.rolls[i]);
+            }
+        }
+        return rollArray;
+    }
+
+    /**
+     * Amongst all the dices rolled in the 
+     */
+    rerollSingleDice(rollId,unitID)
+    {
+        for(let i =0; i< this.rolls.length; i++)
+        {
+            if(this.rolls[i].getUnitId() == unitID && this.rolls[i].getDiceId() == rollId) 
+            {
+                this.rolls[i].rollTheDice();
+            }
+        }
+    }
+
+    /**
+     * The best result comes first from the highest roll,
+     * then from Combat value,
+     * (next if is using elven weapon)
+     *  
+     * returns [rollResult, unit´s Combat, Elven Flag, UnitID, AttackId]
+     */
+    getBestCombatResult()
+    {
+        // first find the highest results
+        var highest_roll = -1;
+        var bestCombat = -1;
+        var unitId = -1;
+        var rollId = -1;
+        var elven_picked = 0;
+
+        // there may be faster ways to extract this result, but this way we wont skip a result for sure
+        for(let i =0; i< this.rolls.length; i++)
+        {
+            if(this.rolls[i].result > highest_roll)
+            {
+                highest_roll = this.rolls[i].result;
+            }
+        }
+
+
+        
+        // we got the highest result
+        for(let i =0; i< this.rolls.length; i++)
+        {
+            
+            if(this.rolls[i].result == highest_roll && this.rolls[i].combat >= bestCombat)
+            {
+                // if(!elven_picked)
+                // {
+                    bestCombat = this.rolls[i].combat;
+                    unitId = this.rolls[i].getUnitId();
+                    rollId = this.rolls[i].getDiceId();
+                    // if(this.rolls[i].hasElvenWeapon)
+                    // {
+                    //     elven_picked = 1;
+                    //     // [rollResult, unit´s Combat, Elven Flag, UnitID, AttackId]
+                    //     return []
+                    // }
+
+
+                // }
+
+            }
+
+            // if 
+        }
+
+        /**
+         * CHECK IF ELVEN WEAPON HERE
+         */
+
+        
+
+         //  At last, return [rollResult, unit´s Combat, Elven Flag, UnitID, AttackId]
+         return [highest_roll, bestCombat, elven_picked, unitId, rollId];
+
+    }
 
 
 }
@@ -208,19 +318,6 @@ class Combat {
             LogProcess("Verifying Combat...");
         let ready = 1;
 
-
-        // if(this.Side_A.armyLists.length <= 0)
-        // {
-        //     console.error("There are no contenders froms side A...");
-        //     ready = 0;
-        // }
-
-        // if(this.Side_B.armyLists.length <= 0)
-        // {
-        //     console.error("There are no contenders froms side B...");
-        //     ready= 0;
-        // }
-
         if(!verifySide(this.Side_1))
         {
             ready= 0;
@@ -267,27 +364,48 @@ class Combat {
         function rollAttacks(rollstruct)
         {
             // side 1
+            for(let i = 0; i<rollstruct.rolls_Side_1.rolls.length;i++)
+            {
+                rollstruct.rolls_Side_1.rolls[i].rollTheDice();
+            }
+
             rollstruct.rolls_Side_1;
             rollstruct.rolls_Side_1.rolls;
-            dices.rollD6();
+
         }
 
-        function combatPhase()
+        function combatPhase(struct)
         {
-            rollAttacks();
+            rollAttacks(struct);
         }
 
         if(DEBUG_BATTLE_ADMIN)
             LogProcess("Starting combat simulation for combat...");
 
-        // Get the dices to be rolled
+        // Get the dices to be rolled - they match the attacks
+        /**
+         * NEED TO TAKE INTO ACCOUNT
+         * - Cab charges +1 attack.
+         * - S
+         */
         this.CreateRolls();
 
+        // Roll
 
-        // 
+        // Re-rolls and modifiers
         combatPhase(this);
 
+
+
+        // Determine strikes, strikes will go directed to the optimized target
         
+        // Each strike to the optimal or selected target (Roll = roundUp((D-S)/2)+4)
+        // Apply modifiers/re-rolls
+        // If the target dies, pick a new target for the remaining strikes
+
+
+
+
     }
 
     CreateRolls()
