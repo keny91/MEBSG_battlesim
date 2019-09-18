@@ -55,6 +55,8 @@ class Roll
         this.attackId = id;
         this.unitId = unit.id;
         this.hasElvenWeapon = 0;
+        // this will point to the original attackID where this one is duplicated because the target it prone or trapped
+        this.additionalAttackTo = -1; 
     }
 
 
@@ -92,7 +94,7 @@ class Rolls
             return -1;
         }
 
-        this.rolls = this.getRolls(Side_);
+        this.rolls = this.getRollsFromUnits(Side_);
 
         // We get this by ordering the Opposite side hurtable units.
         // Depends on which target IA is selected.
@@ -102,7 +104,7 @@ class Rolls
 
     }
 
-    getRolls(Side_)
+    getRollsFromUnits(Side_)
     {
         var rolls_ = [];
 
@@ -154,70 +156,37 @@ class Rolls
         }
     }
 
+
     /**
-     * The best result comes first from the highest roll,
-     * then from Combat value,
-     * (next if is using elven weapon)
-     *  
-     * returns [rollResult, unit´s Combat, Elven Flag, UnitID, AttackId]
+     * For each existing role, another will created and both will be linked so both will be directed to the same target.
+     * This is meant for the prone/trapped mechanic when we are rolling to hurt.
      */
-    getBestCombatResult()
+    duplicateRolls()
     {
-        // first find the highest results
-        var highest_roll = -1;
-        var bestCombat = -1;
-        var unitId = -1;
-        var rollId = -1;
-        var elven_picked = 0;
-
-        // there may be faster ways to extract this result, but this way we wont skip a result for sure
-        for(let i =0; i< this.rolls.length; i++)
-        {
-            if(this.rolls[i].result > highest_roll)
-            {
-                highest_roll = this.rolls[i].result;
-            }
-        }
-
-
-        
-        // we got the highest result
-        for(let i =0; i< this.rolls.length; i++)
-        {
-            
-            if(this.rolls[i].result == highest_roll && this.rolls[i].combat >= bestCombat)
-            {
-                // if(!elven_picked)
-                // {
-                    bestCombat = this.rolls[i].combat;
-                    unitId = this.rolls[i].getUnitId();
-                    rollId = this.rolls[i].getDiceId();
-                    // if(this.rolls[i].hasElvenWeapon)
-                    // {
-                    //     elven_picked = 1;
-                    //     // [rollResult, unit´s Combat, Elven Flag, UnitID, AttackId]
-                    //     return []
-                    // }
-
-
-                // }
-
-            }
-
-            // if 
-        }
-
-        /**
-         * CHECK IF ELVEN WEAPON HERE
-         */
-
-        
-
-         //  At last, return [rollResult, unit´s Combat, Elven Flag, UnitID, AttackId]
-         return [highest_roll, bestCombat, elven_picked, unitId, rollId];
 
     }
 
+    /**
+     * 
+     * @param {Int} UnitId The id of the combat unit that we will be removing all rolls for
+     */
+    clearUnitRolls(UnitId)
+    {
+        
+    }
+
+    /**
+     * 
+     */
+    addRollForUnit()
+    {
+
+    }
+
+    /**
+     * 
+     */
+    addRoll()
 
 }
 
@@ -369,15 +338,15 @@ class Combat {
                 rollstruct.rolls_Side_1.rolls[i].rollTheDice();
             }
 
-            rollstruct.rolls_Side_1;
-            rollstruct.rolls_Side_1.rolls;
+                        // side 1
+            for(let i = 0; i<rollstruct.rolls_Side_2.rolls.length;i++)
+            {
+                rollstruct.rolls_Side_2.rolls[i].rollTheDice();
+            }
+
 
         }
 
-        function combatPhase(struct)
-        {
-            rollAttacks(struct);
-        }
 
         if(DEBUG_BATTLE_ADMIN)
             LogProcess("Starting combat simulation for combat...");
@@ -389,7 +358,7 @@ class Combat {
          * - S
          */
         this.CreateRolls();
-
+        rollAttacks(this)
         // Roll
 
         // Re-rolls and modifiers
@@ -681,3 +650,4 @@ class Side
 
 
 exports.Combat = Combat;
+exports.Rolls = Rolls;
