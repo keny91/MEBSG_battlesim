@@ -47,8 +47,8 @@ class Roll
             return -1;
         }
 
-        this.strength = unit.profile.S;
-        this.combat = unit.profile.F;
+        this.strength = unit.profile.F;
+        this.combat = unit.profile.S;
         this.specials = -1;
         this.effects = [];
         this.result =  -1;
@@ -56,7 +56,7 @@ class Roll
         this.unitId = unit.id;
         this.hasElvenWeapon = 0;
         // this will point to the original attackID where this one is duplicated because the target it prone or trapped
-        this.additionalAttackTo = -1; 
+        this.linkedAttackTo = -1; 
     }
 
 
@@ -78,6 +78,19 @@ class Roll
     getResult()
     {
         return this.result;
+    }
+
+    createDuplicate()
+    {
+        if(!this.combat || !this.strength)
+        {
+            return -1;
+        }
+        var Dupe = Object.assign( Object.create( Object.getPrototypeOf(this)), this);
+        Dupe.attackId += 1000;
+        Dupe.linkedAttackTo = this.attackId;  
+        this.linkedAttackTo = Dupe.attackId;
+        return Dupe;
     }
 }
 
@@ -163,16 +176,49 @@ class Rolls
      */
     duplicateRolls()
     {
+        var arr_size = this.rolls.length;
+        var add_count = 0;
+        // check all rolls
+        for(let i = 0; i<arr_size; i++)
+        {
+            let dup_roll = new this.Roll();
+            this.rolls.push();
+
+            asdassa
+        }
+
+        return arr_size;
+    }
+
+
+    findDuplicateRoll()
+    {
 
     }
 
     /**
      * 
      * @param {Int} UnitId The id of the combat unit that we will be removing all rolls for
+     * @returns nof_rolls removed
      */
     clearUnitRolls(UnitId)
     {
-        
+        var arr_size = this.rolls.length;
+        var remove_count = 0;
+        // check all rolls
+        for(let i = 0; i<arr_size; i++)
+        {
+            if(this.rolls.unitId == UnitId)
+            {
+                this.rolls.splice(i,1);
+                // decrease index to avoid skipping a register.
+                i--;
+                arr_size--;
+                remove_count++;
+            }
+        }
+
+        return remove_count;
     }
 
     /**
@@ -222,8 +268,13 @@ class Combat {
 
 
 
-    // transition from 
-    StartBattle()
+    // This is the part that should be running in parallel with multiple instances to cut-off simulating time...
+    //  Verify combat could be out of the parallel loop
+    /**
+     * 
+     * @param {int} nof_simulations how many simulations will be simulated?
+     */
+    StartBattle(nof_simulations)
     {
         // verify integrity first
         this.VerifyCombat();
