@@ -4,12 +4,32 @@ const dices = require("./rolls");
 
 
 
-function phaseCombat(battle)
+function processPhaseCombat(battle)
 {
 
-    // 
+    var winnerSide = -1;
+    // 1 - get dices
+
+    // 2 - pre-roll effects
+
+    // 3 - roll dices
+
+    // 4 - post roll effects
+
+    // 5 - determine winner/loser side.
+
+    // 6 - rerolls?
+        // 6.1 - reroll availible?
+        // 6.2 - mini to make the reroll
+        // 6.3 - determine winner/loser side.
+        // 6.4 - reroll the other side.  -> change on winner loser
+        // 6.5 - 
+
+        // rerolls opposing side 
+        // 
 
 
+    return winnerSide;
 }
 
 
@@ -89,4 +109,4 @@ function getBestCombatResult(rollStruct)
 }
 
 
-exports.phaseCombat = phaseCombat;
+exports.phaseCombat = processPhaseCombat;

@@ -1,6 +1,7 @@
 
 const mini = require("./mini");
 const dices = require("./rolls");
+const combatPhase = require("./phaseCombat")
 
 const debug = 1;
 var DEBUG_BATTLE_ADMIN = 1;
@@ -233,6 +234,9 @@ class Rolls
      * 
      */
     addRoll()
+    {
+
+    }
 
 }
 
@@ -283,6 +287,7 @@ class Combat {
         //
         this.Simulate();
 
+        
 
     }
 
@@ -413,7 +418,7 @@ class Combat {
         // Roll
 
         // Re-rolls and modifiers
-        combatPhase(this);
+        //combatPhase.processPhaseCombat(this);
 
 
 
