@@ -1,22 +1,77 @@
 const combat = require("./combat");
 const dices = require("./rolls");
 
+class phaseCombatResults
+{
+    constructor(highest_roll, bestCombat, elven_picked, unitId, rollId)
+    {
+        this.highest_roll = highest_roll;
+        this.bestCombat = bestCombat;
+        this.elven_picked = elven_picked;
+        this.unitId = unitId;
+        this.rollId = rollId;
 
+    }
+}
+
+
+function rollAttacks(battle)
+{
+    if(!(battle instanceof combat.Combat))
+    {
+        console.error("Invalid structure parsed into phaseCombat.rollAttacks()");
+        return -1;
+    }
+
+    // if(!(rollStruct instanceof combat.Rolls))
+    // {
+    //     console.error("Invalid structure parsed into phaseCombat.rollAttacks()");
+    //     return -1;
+    // }
+
+    // side 1
+    for(let i = 0; i<battle.rolls_Side_1.rolls.length;i++)
+    {
+        battle.rolls_Side_1.rolls[i].rollTheDice();
+    }
+
+    // side 2
+    for(let i = 0; i<battle.rolls_Side_2.rolls.length;i++)
+    {
+        battle.rolls_Side_2.rolls[i].rollTheDice();
+    }
+
+
+}
 
 
 function processPhaseCombat(battle)
 {
 
+    if(!(battle instanceof combat.Combat))
+    {
+        console.error("Invalid structure parsed into phaseCombat.processPhaseCombat()");
+        return -1;
+    }
+
+    var diceResults_1 = -1;
+    var diceResults_2 = -1;
     var winnerSide = -1;
     // 1 - get dices
 
     // 2 - pre-roll effects
-
+    
     // 3 - roll dices
+    rollAttacks(battle);
+    diceResults_1 =  getBestCombatResult(battle.rolls_Side_1);
+    diceResults_2 =  getBestCombatResult(battle.rolls_Side_2);
 
     // 4 - post roll effects
 
     // 5 - determine winner/loser side.
+    // currently we dismiss 
+    //[highest_roll, bestCombat, elven_picked, unitId, rollId];
+
 
     // 6 - rerolls?
         // 6.1 - reroll availible?
@@ -101,10 +156,10 @@ function getBestCombatResult(rollStruct)
          * CHECK IF ELVEN WEAPON HERE
          */
 
-        
+        var resultStruck = new phaseCombatResults(highest_roll, bestCombat, elven_picked, unitId, rollId);
 
          //  At last, return [rollResult, unit´s Combat, Elven Flag, UnitID, AttackId]
-         return [highest_roll, bestCombat, elven_picked, unitId, rollId];
+         return resultStruck;
 
 }
 

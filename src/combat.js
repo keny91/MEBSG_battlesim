@@ -414,7 +414,8 @@ class Combat {
          * - S
          */
         this.CreateRolls();
-        rollAttacks(this)
+        combatPhase.phaseCombat(this);
+        // rollAttacks(this)
         // Roll
 
         // Re-rolls and modifiers
