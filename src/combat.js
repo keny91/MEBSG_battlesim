@@ -386,22 +386,22 @@ class Combat {
     Simulate()
     {
 
-        function rollAttacks(rollstruct)
-        {
-            // side 1
-            for(let i = 0; i<rollstruct.rolls_Side_1.rolls.length;i++)
-            {
-                rollstruct.rolls_Side_1.rolls[i].rollTheDice();
-            }
+        // function rollAttacks(rollstruct)
+        // {
+        //     // side 1
+        //     for(let i = 0; i<rollstruct.rolls_Side_1.rolls.length;i++)
+        //     {
+        //         rollstruct.rolls_Side_1.rolls[i].rollTheDice();
+        //     }
 
-                        // side 1
-            for(let i = 0; i<rollstruct.rolls_Side_2.rolls.length;i++)
-            {
-                rollstruct.rolls_Side_2.rolls[i].rollTheDice();
-            }
+        //                 // side 1
+        //     for(let i = 0; i<rollstruct.rolls_Side_2.rolls.length;i++)
+        //     {
+        //         rollstruct.rolls_Side_2.rolls[i].rollTheDice();
+        //     }
 
 
-        }
+        // }
 
 
         if(DEBUG_BATTLE_ADMIN)

@@ -44,6 +44,38 @@ function rollAttacks(battle)
 
 }
 
+function DetermineWinner(Side_1_Roll,Side_2_Roll)
+{
+    if(!(battle instanceof phaseCombatResults))
+    {
+        console.error("Invalid structure parsed into phaseCombat.DetermineWinner()");
+        return -1;
+    }
+
+    var winner = -1;
+    // team 1 rolls higher than 2
+    if(Side_1_Roll.highest_roll > Side_2_Roll.highest_roll)
+        winner = 1; 
+    // team 2 rolls higher than 1
+    else if (Side_2_Roll.highest_roll > Side_1_Roll.highest_roll)
+        winner = 2;
+        
+    // they tied on the roll -> decide by combat value
+    else /* (Side_2_Roll.highest_roll > Side_1_Roll.highest_roll) */
+    {
+    // team 1 has higher 'Combat' than 2
+        if(Side_1_Roll.highest_roll > Side_2_Roll.highest_roll)
+            winner = 1; 
+    // team 2 has higher 'Combat' than 1
+        else if (Side_2_Roll.highest_roll > Side_1_Roll.highest_roll)
+            winner = 2;
+    // they tie in combat too -> full tie
+        else
+            winner = 0;
+    }
+    return winner;
+}
+
 
 function processPhaseCombat(battle)
 {
@@ -69,6 +101,15 @@ function processPhaseCombat(battle)
     // 4 - post roll effects
 
     // 5 - determine winner/loser side.
+    winnerSide = DetermineWinner(diceResults_1,diceResults_2);
+
+    // Re-rolls? if the team is losing currently
+    // Don´t forget some modifiers
+    
+
+
+
+
     // currently we dismiss 
     //[highest_roll, bestCombat, elven_picked, unitId, rollId];
 
