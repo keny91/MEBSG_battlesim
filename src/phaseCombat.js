@@ -23,11 +23,6 @@ function rollAttacks(battle)
         return -1;
     }
 
-    // if(!(rollStruct instanceof combat.Rolls))
-    // {
-    //     console.error("Invalid structure parsed into phaseCombat.rollAttacks()");
-    //     return -1;
-    // }
 
     // side 1
     for(let i = 0; i<battle.rolls_Side_1.rolls.length;i++)
@@ -46,7 +41,7 @@ function rollAttacks(battle)
 
 function DetermineWinner(Side_1_Roll,Side_2_Roll)
 {
-    if(!(battle instanceof phaseCombatResults))
+    if(!(Side_1_Roll instanceof phaseCombatResults) || !(Side_2_Roll instanceof phaseCombatResults))
     {
         console.error("Invalid structure parsed into phaseCombat.DetermineWinner()");
         return -1;
@@ -104,8 +99,8 @@ function processPhaseCombat(battle)
     winnerSide = DetermineWinner(diceResults_1,diceResults_2);
 
     // Re-rolls? if the team is losing currently
-    // Don´t forget some modifiers
-    
+    // Don´t forget some modifiers post-combat-roll
+
 
 
 
@@ -205,4 +200,4 @@ function getBestCombatResult(rollStruct)
 }
 
 
-exports.phaseCombat = processPhaseCombat;
+exports.processPhaseCombat = processPhaseCombat;

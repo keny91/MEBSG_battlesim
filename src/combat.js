@@ -1,11 +1,24 @@
 
 const mini = require("./mini");
 const dices = require("./rolls");
-const combatPhase = require("./phaseCombat")
+const combatPhase = require("./phaseCombat");
+const hitPhase = require("./phaseHit")
 
 const debug = 1;
 var DEBUG_BATTLE_ADMIN = 1;
 var COMBAT_LOG = 0;
+
+
+
+const StrickingProtocols = {
+    HighestChance: 10001,
+    KillHeroFirst: 10002,
+    KillNonHeroFirst: 10003,
+    MostValuable: 10004
+
+  }
+
+
 
 // Debugging
 if(DEBUG_BATTLE_ADMIN)
@@ -413,13 +426,18 @@ class Combat {
          * - Cab charges +1 attack.
          * - S
          */
-        this.CreateRolls();
-        combatPhase.phaseCombat(this);
-        // rollAttacks(this)
-        // Roll
 
+        // set default attacks based on profiles... (should we do it somewhere else?)
+        this.CreateRolls();
+
+        // combat phase
+        var combatWinner = combatPhase.processPhaseCombat(this);
+
+
+        // hit phase
+        hitPhase.processPhaseCombat(this, combatWinner);
         // Re-rolls and modifiers
-        //combatPhase.processPhaseCombat(this);
+        
 
 
 
@@ -708,3 +726,4 @@ class Side
 
 exports.Combat = Combat;
 exports.Rolls = Rolls;
+exports.StrickingProtocols = StrickingProtocols;
