@@ -71,6 +71,7 @@ class Roll
         this.hasElvenWeapon = 0;
         // this will point to the original attackID where this one is duplicated because the target it prone or trapped
         this.linkedAttackTo = -1; 
+        this.targets = [];
     }
 
 
@@ -106,12 +107,18 @@ class Roll
         this.linkedAttackTo = Dupe.attackId;
         return Dupe;
     }
+
+    setTargets(targets)
+    {
+        this.targets=targets;
+    }
 }
+
+
+
 
 class Rolls
 {
-
-
 
     constructor(Side_)
     {
@@ -197,8 +204,7 @@ class Rolls
         {
             let dup_roll = new this.Roll();
             this.rolls.push();
-
-            asdassa
+            add_count ++;
         }
 
         return arr_size;
@@ -251,6 +257,27 @@ class Rolls
 
     }
 
+
+    /** This serves to keep the 
+     * 
+     * @param {*} enemyHurtableUnits 
+     * @param {*} Protocol 
+     * 
+     * A unit will target another enemy hurtable unit. If that one is dead/missing
+     * we pick the next determine by the protocol
+     */
+    setTargets(enemyHurtableUnits, Protocol)
+    {
+        // we will do it for each roll independently
+        var arr_size = this.rolls.length;
+
+        for(let i = 0; i<arr_size; i++)
+        {
+            
+
+
+        }
+    }
 }
 
 
@@ -265,6 +292,8 @@ class Combat {
 
         this.rolls_Side_1 = null;
         this.rolls_Side_2 = null;
+
+        this.targetsOrder = [];
 
         this.SimulationStarted; // locks 
 
