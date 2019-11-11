@@ -87,18 +87,21 @@ function processPhaseCombat(battle)
     // 1 - get dices
 
     // 2 - pre-roll effects
+    // setRerolls(unit,);
     
     // 3 - roll dices
     rollAttacks(battle);
-    diceResults_1 =  getBestCombatResult(battle.rolls_Side_1);
-    diceResults_2 =  getBestCombatResult(battle.rolls_Side_2);
+
 
     // 4 - post roll effects
 
     // 5 - determine winner/loser side.
+    diceResults_1 =  getBestCombatResult(battle.rolls_Side_1);
+    diceResults_2 =  getBestCombatResult(battle.rolls_Side_2);
     winnerSide = DetermineWinner(diceResults_1,diceResults_2);
 
-    // Re-rolls? if the team is losing currently
+    // 6 - Re-rolls? if the team is losing currently
+
     // Don´t forget some modifiers post-combat-roll
 
 

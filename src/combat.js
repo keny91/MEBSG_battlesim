@@ -130,6 +130,11 @@ class Rolls
 
         this.rolls = this.getRollsFromUnits(Side_);
 
+        // this.effectHandler; ??? 
+        
+
+
+
         // We get this by ordering the Opposite side hurtable units.
         // Depends on which target IA is selected.
         this.targetOrder =[];
@@ -464,7 +469,7 @@ class Combat {
 
 
         // hit phase
-        hitPhase.processPhaseCombat(this, combatWinner);
+        var hitPhaseResults = hitPhase.processPhaseCombat(this, combatWinner);
         // Re-rolls and modifiers
         
 
