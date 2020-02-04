@@ -146,6 +146,7 @@ function getBestCombatResult(rollStruct)
         var unitId = -1;
         var rollId = -1;
         var elven_picked = 0;
+        var highest_combat = -1;
 
         if(!(rollStruct instanceof combat.Rolls))
         {
@@ -157,6 +158,11 @@ function getBestCombatResult(rollStruct)
         // there may be faster ways to extract this result, but this way we wont skip a result for sure
         for(let i =0; i< rollStruct.rolls.length; i++)
         {
+            if(highest_combat < rollStruct.rolls[i].combat)
+            {
+                highest_combat = rollStruct.rolls[i].combat;
+            }
+
             if(rollStruct.rolls[i].result > highest_roll)
             {
                 highest_roll = rollStruct.rolls[i].result;

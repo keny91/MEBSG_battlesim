@@ -281,6 +281,18 @@ class Rolls
 }
 
 
+class SimulationData
+{
+    constructor()
+    {
+        this.phaseCombatWinner;
+        //this.phaseCombatExtraPlaceholder; // maybe number of dices rolled
+        this.phaseHitTarjets;
+        this.phaseHitResults;
+
+    }
+}
+
 class Combat {
     constructor()
     {
@@ -295,7 +307,7 @@ class Combat {
 
         this.targetsOrder = [];
 
-        this.SimulationStarted; // locks 
+        
 
         // this is the current phase that is being resolved
         // 100 - 199 - 
@@ -305,6 +317,8 @@ class Combat {
         this.phaseIndex;
         // Max 
         this.maxphaseIndex;
+        this.SimulationStarted; // locks 
+        this.SimulationData = new SimulationData();
 
         if(DEBUG_BATTLE_ADMIN)
             LogProcess("Combat object created and initialized.");
@@ -322,9 +336,11 @@ class Combat {
      */
     StartBattle(nof_simulations)
     {
+        
         // verify integrity first
         this.VerifyCombat();
-        // OK? - start simulation
+        // OK? - lift flag
+        this.SimulationStarted = 1;
 
         //
         this.Simulate();
@@ -464,7 +480,7 @@ class Combat {
 
 
         // hit phase
-        hitPhase. (this, combatWinner);
+        var hit_results = hitPhase.processPhaseHit (this, combatWinner);
         // Re-rolls and modifiers
         
 
