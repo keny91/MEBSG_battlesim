@@ -48,34 +48,14 @@ const SpecialRules = {
 
 
 
-  // ENABLE LATER
 
-// function ElectronTest(app, BrowserWindow)
-// {
-//     let win ;
+/**
+ *  This is the part where the user selects
+ */
+function prepareBattle()
+{
 
-//     function createWindow () {
-//         // Create the browser window.
-//         win = new BrowserWindow({ width: 800, height: 600 })
-      
-//         // and load the index.html of the app.
-//         win.loadFile('./appUI/index.html')
-      
-//         // Open the DevTools.
-//         win.webContents.openDevTools()
-      
-//         // Emitted when the window is closed.
-//         win.on('closed', () => {
-//           // Dereference the window object, usually you would store windows
-//           // in an array if your app supports multi windows, this is the time
-//           // when you should delete the corresponding element.
-//           win = null
-//         })
-//     }
-    
-//     app.on('ready', createWindow);
-// }
-
+}
 /** After all contenders in a battle have been determined
  * we will log all possibilities in a battle log
  * 
@@ -426,6 +406,20 @@ function test()
 
     //ElectronTest(app, BrowserWindow);
 }
+
+function test2()
+{
+
+    const statEntry = {attribute,description};
+    const fillEntry = (attr,desc) => 
+    {
+        return {attribute= attr,description=desc};
+    }
+    const profile = { Mv : "Movement",Fv: "Fight Value",Sv:"Shoot Value",S:"Strength",D:"Defense", A:"Attacks", W:"Wounds" ,C:"Courage",M:"Might", Wi:"Will", F:"Fate" };
+    
+}
+
+
 
 
 test();
