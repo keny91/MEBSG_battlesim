@@ -14,6 +14,7 @@ const weapon = require("./weapon");
 var DEBUG_ON = 0;
 var DEBUG_COMBAT_MINI  = 0;
 
+
 // Debugging
 if(DEBUG_COMBAT_MINI)
 {
